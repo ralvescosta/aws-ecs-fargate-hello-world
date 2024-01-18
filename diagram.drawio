@@ -1,11 +1,11 @@
 <mxfile host="65bd71144e">
     <diagram id="N9QRYx7wn-zpyOPovLZV" name="v1">
-        <mxGraphModel dx="2463" dy="1099" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="3448" dy="1036" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
                 <mxCell id="22" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fontColor=#FFFFFF;fillColor=default;dashed=1;dashPattern=12 12;" vertex="1" parent="1">
-                    <mxGeometry x="213" y="170" width="424.5" height="870" as="geometry"/>
+                    <mxGeometry x="213" y="160" width="424.5" height="880" as="geometry"/>
                 </mxCell>
                 <mxCell id="2" value="" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 8;" vertex="1" parent="1">
                     <mxGeometry x="260.25" y="380" width="330" height="630" as="geometry"/>
@@ -63,37 +63,37 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="13" value="" style="sketch=0;outlineConnect=0;fontColor=#FFFFFF;gradientColor=none;fillColor=#4D27AA;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.application_load_balancer;dashPattern=8 8;spacingLeft=0;spacingRight=0;spacingBottom=0;" vertex="1" parent="1">
-                    <mxGeometry x="384.75" y="231" width="78" height="78" as="geometry"/>
+                    <mxGeometry x="384.75" y="270" width="78" height="78" as="geometry"/>
                 </mxCell>
                 <mxCell id="30" style="edgeStyle=elbowEdgeStyle;elbow=vertical;html=1;fontColor=#FFFFFF;startArrow=none;startFill=0;" edge="1" parent="1" source="15" target="18">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="15" value="" style="shape=actor;whiteSpace=wrap;html=1;fontColor=#FFFFFF;" vertex="1" parent="1">
-                    <mxGeometry x="248.75" y="40" width="40" height="60" as="geometry"/>
+                    <mxGeometry x="403.75" y="40" width="40" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="29" style="edgeStyle=elbowEdgeStyle;elbow=vertical;html=1;fontColor=#FFFFFF;startArrow=classic;startFill=1;" edge="1" parent="1" source="18" target="13">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="18" value="" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;strokeColor=#232F3E;fillColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.internet_gateway;" vertex="1" parent="1">
-                    <mxGeometry x="393.75" y="70" width="60" height="60" as="geometry"/>
+                    <mxGeometry x="394.25" y="180" width="60" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="19" value="Public Subnet" style="text;html=1;strokeColor=default;fillColor=default;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#FFFFFF;" vertex="1" parent="1">
                     <mxGeometry x="285.75" y="370" width="60" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="20" value="Default Internet Gateway" style="text;html=1;strokeColor=default;fillColor=default;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#FFFFFF;" vertex="1" parent="1">
-                    <mxGeometry x="450.25" y="110" width="100" height="40" as="geometry"/>
+                    <mxGeometry x="450.75" y="220" width="100" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="21" value="External LoadBalancer" style="text;html=1;strokeColor=default;fillColor=default;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#FFFFFF;" vertex="1" parent="1">
-                    <mxGeometry x="453.75" y="280" width="100" height="40" as="geometry"/>
+                    <mxGeometry x="453.75" y="308" width="100" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="24" value="Default VPC" style="text;html=1;strokeColor=default;fillColor=default;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#FFFFFF;" vertex="1" parent="1">
-                    <mxGeometry x="248.75" y="160" width="60" height="30" as="geometry"/>
+                    <mxGeometry x="248.75" y="150" width="60" height="30" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
     </diagram>
     <diagram name="v2" id="DFxNjS_2CUx3qaEgrgcp">
-        <mxGraphModel dx="2155" dy="961" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="2652" dy="797" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="iVcGrAR-wwBEdjC-Baw3-0"/>
                 <mxCell id="iVcGrAR-wwBEdjC-Baw3-1" parent="iVcGrAR-wwBEdjC-Baw3-0"/>
