@@ -1,0 +1,116 @@
+basePath: /v1
+definitions:
+  handlers.HTTPError:
+    properties:
+      message:
+        type: string
+      statusCode:
+        type: integer
+    type: object
+  handlers.Product:
+    properties:
+      category: {}
+      createdAt:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      updatedAt:
+        type: string
+    type: object
+host: localhost:3333
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server.
+  license:
+    name: MIT
+    url: https://github.com/ralvescosta/aws-ecs-fargate-hello-world/blob/main/LICENSE
+  termsOfService: https://github.com/ralvescosta/aws-ecs-fargate-hello-world/blob/main/LICENSE
+  title: Hello World HTTP API
+  version: "1.0"
+paths:
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: List Products with pagination
+      parameters:
+      - description: Product Category
+        in: query
+        name: category
+        required: true
+        type: string
+      - default: 10
+        description: Query Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - default: 0
+        description: Query Offset
+        in: query
+        name: offset
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/handlers.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.HTTPError'
+      summary: ListProducts
+      tags:
+      - products
+    post:
+      consumes:
+      - application/json
+      description: Create a new Product
+      parameters:
+      - description: Add Product
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.Product'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/handlers.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.HTTPError'
+      summary: CreateProducts
+      tags:
+      - products
+swagger: "2.0"
