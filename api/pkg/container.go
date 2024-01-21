@@ -6,9 +6,11 @@ import (
 	"syscall"
 
 	"github.com/ralvescosta/gokit/configs"
-	configsBuilder "github.com/ralvescosta/gokit/configs_builder"
 	"github.com/ralvescosta/gokit/logging"
 	"go.uber.org/dig"
+
+	"github.com/ralvescosta/ecs-hello-world/api/pkg/handlers"
+	configsBuilder "github.com/ralvescosta/gokit/configs_builder"
 )
 
 func NewContainer() (*dig.Container, error) {
@@ -26,6 +28,7 @@ func NewContainer() (*dig.Container, error) {
 	container.Provide(func() *configs.AppConfigs { return cfg.AppConfigs })
 	container.Provide(logging.NewDefaultLogger)
 	container.Provide(ProvideSignal)
+	container.Provide(handlers.NewProductsHandler)
 
 	return container, nil
 }

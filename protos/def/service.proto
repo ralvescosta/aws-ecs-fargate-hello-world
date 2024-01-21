@@ -5,7 +5,7 @@ option go_package = "github.com/ralvescosta/ec2-hellow-world/protos";
 import "google/protobuf/timestamp.proto";
 
 enum Category {
-  UNKOWN_CATEGORY = 0;
+  UNKNOWN_CATEGORY = 0;
   A = 1;
   B = 2;
   C = 3;
@@ -20,8 +20,8 @@ message Product {
   google.protobuf.Timestamp updated_at = 6;
 }
 
-enum Order {
-  UNKOWN_ORDER = 0;
+enum Ordination {
+  UNKNOWN_ORDER = 0;
   ASC = 1;
   DESC = 2;
 }
@@ -40,7 +40,7 @@ message ListProductsRequest {
   int32 limit = 1;
   int32 offset = 2;
   optional Category category = 3;
-  optional Order order = 4;
+  optional Ordination ordination = 4;
 }
 
 message ListProductsResponse {
