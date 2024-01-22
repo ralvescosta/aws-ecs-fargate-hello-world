@@ -10,7 +10,7 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var root = &cobra.Command{
 	Use:     "app",
-	Short:   "HTTP API Example",
+	Short:   "HTTP API",
 	Version: "0.0.1",
 }
 

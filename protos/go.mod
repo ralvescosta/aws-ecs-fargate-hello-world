@@ -1,4 +1,4 @@
-module github.com/ralvescosta/ec2-hellow-world/protos
+module github.com/ralvescosta/ec2-hello-world/protos
 
 go 1.21.6
 

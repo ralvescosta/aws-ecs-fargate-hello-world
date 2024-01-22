@@ -1,3 +1,34 @@
-module github.com/ralvescosta/ecs-hellow-world/grpc
+module github.com/ralvescosta/ecs-hello-world/grpc
 
-go 1.21.5
+go 1.21.6
+
+require (
+	github.com/ralvescosta/ec2-hello-world/protos v1.0.0
+	github.com/ralvescosta/gokit/configs v1.17.0
+	github.com/ralvescosta/gokit/configs_builder v1.17.0
+	github.com/ralvescosta/gokit/logging v1.17.0
+	github.com/spf13/cobra v1.8.0
+	go.uber.org/dig v1.17.1
+	go.uber.org/zap v1.26.0
+)
+
+require (
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/golang/protobuf v1.5.3 // indirect
+	github.com/inconshreveable/mousetrap v1.1.0 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/ralvescosta/dotenv v1.0.4 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/stretchr/objx v0.5.1 // indirect
+	github.com/stretchr/testify v1.8.4 // indirect
+	go.uber.org/multierr v1.11.0 // indirect
+	golang.org/x/net v0.16.0 // indirect
+	golang.org/x/sys v0.13.0 // indirect
+	golang.org/x/text v0.13.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20231002182017-d307bd883b97 // indirect
+	google.golang.org/grpc v1.60.1 // indirect
+	google.golang.org/protobuf v1.32.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
+)
+
+replace github.com/ralvescosta/ec2-hello-world/protos => ../protos
