@@ -14,7 +14,10 @@ import (
 )
 
 type (
-	ProductsService interface{}
+	ProductsService interface {
+		Create(ctx context.Context, req *protos.CreateProductRequest) (*protos.CreateProductResponse, error)
+		ListProducts(ctx context.Context, req *protos.ListProductsRequest) (*protos.ListProductsResponse, error)
+	}
 
 	productsService struct {
 		logger   logging.Logger
@@ -53,7 +56,17 @@ func (s *productsService) Create(ctx context.Context, req *protos.CreateProductR
 }
 
 func (s *productsService) ListProducts(ctx context.Context, req *protos.ListProductsRequest) (*protos.ListProductsResponse, error) {
-	return nil, nil
+	products := []*protos.Product{}
+
+	for _, v := range s.products {
+		if v.Category == *req.Category {
+			products = append(products, v)
+		}
+	}
+
+	return &protos.ListProductsResponse{
+		Products: products,
+	}, nil
 }
 
 func (s *productsService) mapKey(req *protos.Product) string {

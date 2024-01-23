@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/ralvescosta/ec2-hello-world/protos"
+	"github.com/ralvescosta/ecs-hello-world/grpc/pkg/internal/errors"
 	"github.com/ralvescosta/ecs-hello-world/grpc/pkg/internal/services"
 	"github.com/ralvescosta/gokit/logging"
 )
@@ -23,9 +24,21 @@ func NewProductServer(logger logging.Logger, service services.ProductsService) p
 }
 
 func (s *productsServer) Create(ctx context.Context, req *protos.CreateProductRequest) (*protos.CreateProductResponse, error) {
-	return nil, nil
+	res, err := s.service.Create(ctx, req)
+	if err != nil {
+		appErr := err.(errors.ApplicationError)
+		return nil, appErr.ToGrpc()
+	}
+
+	return res, nil
 }
 
 func (s *productsServer) ListProducts(ctx context.Context, req *protos.ListProductsRequest) (*protos.ListProductsResponse, error) {
-	return nil, nil
+	res, err := s.service.ListProducts(ctx, req)
+	if err != nil {
+		appErr := err.(errors.ApplicationError)
+		return nil, appErr.ToGrpc()
+	}
+
+	return res, nil
 }
