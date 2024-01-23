@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
 
+	"github.com/ralvescosta/ec2-hello-world/protos"
 	"github.com/ralvescosta/ecs-hello-world/api/pkg/internal/services"
 	"github.com/ralvescosta/ecs-hello-world/api/pkg/views"
 	"github.com/ralvescosta/gokit/httpw/server"
@@ -51,9 +53,19 @@ func (h *productsHandler) post(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	println(body)
+	grpcResponse, err := h.service.Create(req.Context(), &protos.CreateProductRequest{
+		Name:     body.Name,
+		Category: protos.Category(body.Category),
+		Price:    body.Price,
+	})
 
-	w.WriteHeader(200)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	w.Write(views.ProductFromProto(grpcResponse.Product).ToBuffer())
+	w.WriteHeader(http.StatusCreated)
 }
 
 // ListProducts
@@ -71,7 +83,30 @@ func (h *productsHandler) post(w http.ResponseWriter, req *http.Request) {
 // @Failure      500      {object}  views.HTTPError
 // @Router       /products [get]
 func (h *productsHandler) list(w http.ResponseWriter, req *http.Request) {
-	h.logger.Info("get")
+	body, err := ExtractBody[views.ListProductsRequest](w, req)
+	if err != nil {
+		h.logger.Error("unformatted body", zap.Error(err))
+		return
+	}
 
-	w.WriteHeader(200)
+	grpcResponse, err := h.service.List(req.Context(), &protos.ListProductsRequest{
+		Limit:      body.Limit,
+		Offset:     body.Offset,
+		Category:   protos.Category(body.Category),
+		Ordination: (*protos.Ordination)(&body.Ordination),
+	})
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	list := []*views.Product{}
+	for _, v := range grpcResponse.Products {
+		list = append(list, views.ProductFromProto(v))
+	}
+
+	bytes, _ := json.Marshal(list)
+	w.WriteHeader(http.StatusOK)
+	w.Write(bytes)
 }

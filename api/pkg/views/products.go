@@ -1,6 +1,7 @@
 package views
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/ralvescosta/ec2-hello-world/protos"
@@ -23,9 +24,9 @@ type (
 
 	// CreateProductRequest
 	CreateProductRequest struct {
-		Name     string  `json:"name"     validate:"required,min=3"   example:"name" binding:"required"`
-		Category int8    `json:"category" validate:"required"         example:"1"    binding:"required"`
-		Price    float32 `json:"price"    validate:"required,gte=1.0" example:"1.2"  binding:"required"`
+		Name     string   `json:"name"     validate:"required,min=3"   example:"name" binding:"required"`
+		Category Category `json:"category" validate:"required"         example:"1"    binding:"required"`
+		Price    float32  `json:"price"    validate:"required,gte=1.0" example:"1.2"  binding:"required"`
 	}
 
 	// ListProductsRequest
@@ -72,5 +73,11 @@ func ProductFromProto(p *protos.Product) *Product {
 		Category:  Category(p.Category),
 		Price:     p.Price,
 		CreatedAt: p.CreatedAt.AsTime(),
+		UpdatedAt: p.UpdatedAt.AsTime(),
 	}
+}
+
+func (p *Product) ToBuffer() []byte {
+	bytes, _ := json.Marshal(p)
+	return bytes
 }

@@ -11,8 +11,8 @@ import (
 )
 
 func ExtractBody[T any](w http.ResponseWriter, r *http.Request) (*T, error) {
-	var body *T
-	err := json.NewDecoder(r.Body).Decode(body)
+	var body T
+	err := json.NewDecoder(r.Body).Decode(&body)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -28,7 +28,7 @@ func ExtractBody[T any](w http.ResponseWriter, r *http.Request) (*T, error) {
 		return nil, err
 	}
 
-	return body, nil
+	return &body, nil
 }
 
 func validate(w http.ResponseWriter, body any) (error, *map[string]string) {

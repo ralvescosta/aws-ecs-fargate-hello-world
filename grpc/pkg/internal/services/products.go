@@ -39,6 +39,7 @@ func (s *productsService) Create(ctx context.Context, req *protos.CreateProductR
 		Category:  req.Category,
 		Price:     req.Price,
 		CreatedAt: timestamppb.Now(),
+		UpdatedAt: timestamppb.Now(),
 	}
 
 	key := s.mapKey(&product)
@@ -59,7 +60,7 @@ func (s *productsService) ListProducts(ctx context.Context, req *protos.ListProd
 	products := []*protos.Product{}
 
 	for _, v := range s.products {
-		if v.Category == *req.Category {
+		if v.Category == req.Category {
 			products = append(products, v)
 		}
 	}
