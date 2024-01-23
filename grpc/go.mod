@@ -6,15 +6,19 @@ require (
 	github.com/ralvescosta/ec2-hello-world/protos v1.0.0
 	github.com/ralvescosta/gokit/configs v1.17.0
 	github.com/ralvescosta/gokit/configs_builder v1.17.0
+	github.com/ralvescosta/gokit/guid v1.17.0
 	github.com/ralvescosta/gokit/logging v1.17.0
 	github.com/spf13/cobra v1.8.0
 	go.uber.org/dig v1.17.1
 	go.uber.org/zap v1.26.0
+	google.golang.org/grpc v1.60.1
+	google.golang.org/protobuf v1.32.0
 )
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
+	github.com/google/uuid v1.5.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/ralvescosta/dotenv v1.0.4 // indirect
@@ -26,8 +30,6 @@ require (
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231002182017-d307bd883b97 // indirect
-	google.golang.org/grpc v1.60.1 // indirect
-	google.golang.org/protobuf v1.32.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 

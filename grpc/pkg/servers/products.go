@@ -4,17 +4,20 @@ import (
 	"context"
 
 	"github.com/ralvescosta/ec2-hello-world/protos"
+	"github.com/ralvescosta/ecs-hello-world/grpc/pkg/internal/services"
 	"github.com/ralvescosta/gokit/logging"
 )
 
 type productsServer struct {
-	logger logging.Logger
+	logger  logging.Logger
+	service services.ProductsService
 	protos.UnimplementedProductsServer
 }
 
-func NewProductServer(logger logging.Logger) protos.ProductsServer {
+func NewProductServer(logger logging.Logger, service services.ProductsService) protos.ProductsServer {
 	return &productsServer{
 		logger,
+		service,
 		protos.UnimplementedProductsServer{},
 	}
 }

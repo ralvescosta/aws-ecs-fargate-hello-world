@@ -10,6 +10,7 @@ import (
 	"github.com/ralvescosta/gokit/logging"
 	"go.uber.org/dig"
 
+	"github.com/ralvescosta/ecs-hello-world/grpc/pkg/internal/services"
 	"github.com/ralvescosta/ecs-hello-world/grpc/pkg/servers"
 )
 
@@ -28,6 +29,7 @@ func NewContainer() (*dig.Container, error) {
 	container.Provide(func() *configs.AppConfigs { return cfg.AppConfigs })
 	container.Provide(logging.NewDefaultLogger)
 	container.Provide(ProvideSignal)
+	container.Provide(services.NewProductsService)
 	container.Provide(servers.NewProductServer)
 
 	return container, nil
