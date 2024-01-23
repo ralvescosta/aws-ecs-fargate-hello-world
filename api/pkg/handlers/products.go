@@ -4,8 +4,10 @@ import (
 	"net/http"
 
 	"github.com/ralvescosta/ecs-hello-world/api/pkg/internal/services"
+	"github.com/ralvescosta/ecs-hello-world/api/pkg/views"
 	"github.com/ralvescosta/gokit/httpw/server"
 	"github.com/ralvescosta/gokit/logging"
+	"go.uber.org/zap"
 )
 
 type (
@@ -36,14 +38,20 @@ func (h *productsHandler) Install(router server.HTTPServer) {
 // @Tags         products
 // @Accept       json
 // @Produce      json
-// @Param				 product	body	handlers.Product	true	"Add Product"
-// @Success      201  {object}  handlers.Product
-// @Failure      400  {object}  handlers.HTTPError
-// @Failure      404  {object}  handlers.HTTPError
-// @Failure      500  {object}  handlers.HTTPError
+// @Param				 product	body	views.CreateProductRequest	true	"Add Product"
+// @Success      201  {object}  views.Product
+// @Failure      400  {object}  views.HTTPError
+// @Failure      404  {object}  views.HTTPError
+// @Failure      500  {object}  views.HTTPError
 // @Router       /products [post]
 func (h *productsHandler) post(w http.ResponseWriter, req *http.Request) {
-	h.logger.Info("post")
+	body, err := ExtractBody[views.CreateProductRequest](w, req)
+	if err != nil {
+		h.logger.Error("unformatted body", zap.Error(err))
+		return
+	}
+
+	println(body)
 
 	w.WriteHeader(200)
 }
@@ -57,10 +65,10 @@ func (h *productsHandler) post(w http.ResponseWriter, req *http.Request) {
 // @Param				 category	query	    string             true "Product Category" Enum(A, B, C)
 // @Param        limit    query     int                true "Query Limit"      default(10)
 // @Param        offset   query     int                true "Query Offset"     default(0)
-// @Success      201      {object}  handlers.Product
-// @Failure      400      {object}  handlers.HTTPError
-// @Failure      404      {object}  handlers.HTTPError
-// @Failure      500      {object}  handlers.HTTPError
+// @Success      201      {object}  views.Product
+// @Failure      400      {object}  views.HTTPError
+// @Failure      404      {object}  views.HTTPError
+// @Failure      500      {object}  views.HTTPError
 // @Router       /products [get]
 func (h *productsHandler) list(w http.ResponseWriter, req *http.Request) {
 	h.logger.Info("get")

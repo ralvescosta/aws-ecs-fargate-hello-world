@@ -1,15 +1,33 @@
 basePath: /v1
 definitions:
-  handlers.HTTPError:
+  views.CreateProductRequest:
     properties:
-      message:
+      category:
+        example: 1
+        type: integer
+      name:
+        example: name
+        minLength: 3
         type: string
+      price:
+        example: 1.2
+        minimum: 1
+        type: number
+    required:
+    - category
+    - name
+    - price
+    type: object
+  views.HTTPError:
+    properties:
+      message: {}
       statusCode:
         type: integer
     type: object
-  handlers.Product:
+  views.Product:
     properties:
-      category: {}
+      category:
+        type: integer
       createdAt:
         type: string
       id:
@@ -64,19 +82,19 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/handlers.Product'
+            $ref: '#/definitions/views.Product'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.HTTPError'
+            $ref: '#/definitions/views.HTTPError'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.HTTPError'
+            $ref: '#/definitions/views.HTTPError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.HTTPError'
+            $ref: '#/definitions/views.HTTPError'
       summary: ListProducts
       tags:
       - products
@@ -90,26 +108,26 @@ paths:
         name: product
         required: true
         schema:
-          $ref: '#/definitions/handlers.Product'
+          $ref: '#/definitions/views.CreateProductRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/handlers.Product'
+            $ref: '#/definitions/views.Product'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.HTTPError'
+            $ref: '#/definitions/views.HTTPError'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.HTTPError'
+            $ref: '#/definitions/views.HTTPError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.HTTPError'
+            $ref: '#/definitions/views.HTTPError'
       summary: CreateProducts
       tags:
       - products

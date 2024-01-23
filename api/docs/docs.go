@@ -66,25 +66,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/handlers.Product"
+                            "$ref": "#/definitions/views.Product"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.HTTPError"
+                            "$ref": "#/definitions/views.HTTPError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/handlers.HTTPError"
+                            "$ref": "#/definitions/views.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/handlers.HTTPError"
+                            "$ref": "#/definitions/views.HTTPError"
                         }
                     }
                 }
@@ -108,7 +108,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/handlers.Product"
+                            "$ref": "#/definitions/views.CreateProductRequest"
                         }
                     }
                 ],
@@ -116,25 +116,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/handlers.Product"
+                            "$ref": "#/definitions/views.Product"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.HTTPError"
+                            "$ref": "#/definitions/views.HTTPError"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/handlers.HTTPError"
+                            "$ref": "#/definitions/views.HTTPError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/handlers.HTTPError"
+                            "$ref": "#/definitions/views.HTTPError"
                         }
                     }
                 }
@@ -142,21 +142,45 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "handlers.HTTPError": {
+        "views.CreateProductRequest": {
+            "type": "object",
+            "required": [
+                "category",
+                "name",
+                "price"
+            ],
+            "properties": {
+                "category": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "example": "name"
+                },
+                "price": {
+                    "type": "number",
+                    "minimum": 1,
+                    "example": 1.2
+                }
+            }
+        },
+        "views.HTTPError": {
             "type": "object",
             "properties": {
-                "message": {
-                    "type": "string"
-                },
+                "message": {},
                 "statusCode": {
                     "type": "integer"
                 }
             }
         },
-        "handlers.Product": {
+        "views.Product": {
             "type": "object",
             "properties": {
-                "category": {},
+                "category": {
+                    "type": "integer"
+                },
                 "createdAt": {
                     "type": "string"
                 },

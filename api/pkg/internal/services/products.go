@@ -9,8 +9,8 @@ import (
 
 type (
 	ProductsService interface {
-		Create(ctx context.Context, product interface{}) error
-		List(context.Context, interface{}) error
+		Create(context.Context, *protos.CreateProductRequest) (*protos.CreateProductResponse, error)
+		List(context.Context, *protos.ListProductsRequest) (*protos.ListProductsResponse, error)
 	}
 
 	productsService struct {
@@ -23,10 +23,10 @@ func NewProductsService(logger logging.Logger, client protos.ProductsClient) Pro
 	return &productsService{logger, client}
 }
 
-func (s *productsService) Create(ctx context.Context, product interface{}) error {
-	return nil
+func (s *productsService) Create(ctx context.Context, req *protos.CreateProductRequest) (*protos.CreateProductResponse, error) {
+	return s.client.Create(ctx, req)
 }
 
-func (s *productsService) List(ctx context.Context, product interface{}) error {
-	return nil
+func (s *productsService) List(ctx context.Context, req *protos.ListProductsRequest) (*protos.ListProductsResponse, error) {
+	return s.client.ListProducts(ctx, req)
 }
