@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/ralvescosta/ecs-hello-world/api/pkg/internal/services"
 	"github.com/ralvescosta/gokit/httpw/server"
 	"github.com/ralvescosta/gokit/logging"
 )
@@ -13,12 +14,13 @@ type (
 	}
 
 	productsHandler struct {
-		logger logging.Logger
+		logger  logging.Logger
+		service services.ProductsService
 	}
 )
 
-func NewProductsHandler(logger logging.Logger) HTTPHandlers {
-	return &productsHandler{logger}
+func NewProductsHandler(logger logging.Logger, service services.ProductsService) HTTPHandlers {
+	return &productsHandler{logger, service}
 }
 
 func (h *productsHandler) Install(router server.HTTPServer) {

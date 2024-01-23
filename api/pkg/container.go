@@ -8,8 +8,13 @@ import (
 	"github.com/ralvescosta/gokit/configs"
 	"github.com/ralvescosta/gokit/logging"
 	"go.uber.org/dig"
+	"go.uber.org/zap"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
+	"github.com/ralvescosta/ec2-hello-world/protos"
 	"github.com/ralvescosta/ecs-hello-world/api/pkg/handlers"
+	"github.com/ralvescosta/ecs-hello-world/api/pkg/internal/services"
 	configsBuilder "github.com/ralvescosta/gokit/configs_builder"
 )
 
@@ -29,6 +34,8 @@ func NewContainer() (*dig.Container, error) {
 	container.Provide(logging.NewDefaultLogger)
 	container.Provide(ProvideSignal)
 	container.Provide(handlers.NewProductsHandler)
+	container.Provide(ProvideProductsClient)
+	container.Provide(services.NewProductsService)
 
 	return container, nil
 }
@@ -38,4 +45,18 @@ func ProvideSignal() chan os.Signal {
 	signal.Notify(sig, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 
 	return sig
+}
+
+func ProvideProductsClient(cfgs *configs.Configs, logger logging.Logger) (protos.ProductsClient, error) {
+	logger.Debug("connection to products grpc...")
+
+	conn, err := grpc.Dial("localhost:5000", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		logger.Error("failure to stablish connection", zap.Error(err))
+		return nil, err
+	}
+
+	logger.Debug("products grpc connected!")
+
+	return protos.NewProductsClient(conn), nil
 }
