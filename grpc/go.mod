@@ -1,9 +1,9 @@
-module github.com/ralvescosta/ecs-hello-world/grpc
+module github.com/ralvescosta/aws-ecs-fargate-hello-world/grpc
 
 go 1.21.6
 
 require (
-	github.com/ralvescosta/ec2-hello-world/protos v1.0.0
+	
 	github.com/ralvescosta/gokit/configs v1.17.0
 	github.com/ralvescosta/gokit/configs_builder v1.17.0
 	github.com/ralvescosta/gokit/guid v1.17.0
@@ -33,4 +33,3 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/ralvescosta/ec2-hello-world/protos => ../protos

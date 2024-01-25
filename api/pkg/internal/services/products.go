@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 
-	"github.com/ralvescosta/ec2-hello-world/protos"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/protos"
 	"github.com/ralvescosta/gokit/logging"
 )
 

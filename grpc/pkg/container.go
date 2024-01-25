@@ -10,8 +10,8 @@ import (
 	"github.com/ralvescosta/gokit/logging"
 	"go.uber.org/dig"
 
-	"github.com/ralvescosta/ecs-hello-world/grpc/pkg/internal/services"
-	"github.com/ralvescosta/ecs-hello-world/grpc/pkg/servers"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/grpc/pkg/internal/services"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/grpc/pkg/servers"
 )
 
 func NewContainer() (*dig.Container, error) {

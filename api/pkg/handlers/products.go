@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/ralvescosta/ec2-hello-world/protos"
-	"github.com/ralvescosta/ecs-hello-world/api/pkg/internal/services"
-	"github.com/ralvescosta/ecs-hello-world/api/pkg/views"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/api/pkg/internal/services"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/api/pkg/views"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/protos"
 	"github.com/ralvescosta/gokit/httpw/server"
 	"github.com/ralvescosta/gokit/logging"
 	"go.uber.org/zap"

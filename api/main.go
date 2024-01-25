@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/ralvescosta/ecs-hello-world/api/cmd"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/api/cmd"
 	"github.com/spf13/cobra"
 
-	_ "github.com/ralvescosta/ecs-hello-world/api/docs"
+	_ "github.com/ralvescosta/aws-ecs-fargate-hello-world/api/docs"
 )
 
 // rootCmd represents the base command when called without any subcommands

@@ -6,7 +6,7 @@ import (
 	"github.com/ralvescosta/gokit/httpw/server"
 	"github.com/spf13/cobra"
 
-	"github.com/ralvescosta/ecs-hello-world/api/pkg/handlers"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/api/pkg/handlers"
 )
 
 type APIParams struct {

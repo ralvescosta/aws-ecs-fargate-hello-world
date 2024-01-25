@@ -1,4 +1,4 @@
-module github.com/ralvescosta/ec2-hello-world/protos
+module github.com/ralvescosta/aws-ecs-fargate-hello-world/protos
 
 go 1.21.6
 

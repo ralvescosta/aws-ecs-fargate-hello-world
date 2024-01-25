@@ -10,7 +10,7 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 
-	"github.com/ralvescosta/ec2-hello-world/protos"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/protos"
 )
 
 type GRPCParams struct {

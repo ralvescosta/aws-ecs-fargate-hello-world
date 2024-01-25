@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/ralvescosta/ecs-hello-world/grpc/cmd"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/grpc/cmd"
 	"github.com/spf13/cobra"
 )
 

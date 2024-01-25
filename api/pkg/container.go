@@ -12,9 +12,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	"github.com/ralvescosta/ec2-hello-world/protos"
-	"github.com/ralvescosta/ecs-hello-world/api/pkg/handlers"
-	"github.com/ralvescosta/ecs-hello-world/api/pkg/internal/services"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/api/pkg/handlers"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/api/pkg/internal/services"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/protos"
 	configsBuilder "github.com/ralvescosta/gokit/configs_builder"
 )
 

@@ -9,8 +9,8 @@ import (
 	"github.com/ralvescosta/gokit/logging"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	"github.com/ralvescosta/ec2-hello-world/protos"
-	"github.com/ralvescosta/ecs-hello-world/grpc/pkg/internal/errors"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/grpc/pkg/internal/errors"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/protos"
 )
 
 type (

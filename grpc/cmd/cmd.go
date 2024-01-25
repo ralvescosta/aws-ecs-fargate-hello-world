@@ -8,7 +8,7 @@ import (
 	"github.com/ralvescosta/gokit/logging"
 	"github.com/spf13/cobra"
 
-	"github.com/ralvescosta/ecs-hello-world/grpc/pkg"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/grpc/pkg"
 )
 
 type CommonParams struct {

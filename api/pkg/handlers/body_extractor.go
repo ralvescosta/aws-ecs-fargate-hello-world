@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 
-	"github.com/ralvescosta/ecs-hello-world/api/pkg/views"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/api/pkg/views"
 )
 
 func ExtractBody[T any](w http.ResponseWriter, r *http.Request) (*T, error) {
