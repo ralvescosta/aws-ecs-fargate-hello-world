@@ -33,7 +33,7 @@ jobs:
 
     - name: 🔐 Run audit
       run: |
-        go build
+        cd ${{ matrix.services }} && go build
 
   build:
     runs-on: ubuntu-latest
@@ -48,7 +48,7 @@ jobs:
       
     - name: 🐳 Build container
       env:
-        IMAGE_TAG: ${{ matrix.service }}
+        IMAGE_TAG: ${{ matrix.services }}
       run: |
-        cd ${{ matrix.service }} && \
-        docker build . -t ecs-fargate-${{ matrix.service }}
+        cd ${{ matrix.services }} && \
+        docker build . -t ecs-fargate-${{ matrix.services }}
