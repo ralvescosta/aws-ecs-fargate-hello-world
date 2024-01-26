@@ -4,14 +4,14 @@ go 1.21.6
 
 require (
 	github.com/go-playground/validator/v10 v10.17.0
-	github.com/ralvescosta/aws-ecs-fargate-hello-world/protos v1.0.0
+	github.com/ralvescosta/aws-ecs-fargate-hello-world/protos v0.0.0-20240125081851-9bb19715748f
 	github.com/ralvescosta/gokit/configs v1.17.0
 	github.com/ralvescosta/gokit/configs_builder v1.17.0
 	github.com/ralvescosta/gokit/guid v1.17.0
 	github.com/ralvescosta/gokit/logging v1.17.0
 	github.com/swaggo/swag v1.16.2
 	go.uber.org/dig v1.17.1
-	google.golang.org/grpc v1.60.1
+	google.golang.org/grpc v1.61.0
 )
 
 require (
@@ -48,12 +48,12 @@ require (
 	go.opentelemetry.io/otel v1.21.0 // indirect
 	go.opentelemetry.io/otel/metric v1.21.0 // indirect
 	go.opentelemetry.io/otel/trace v1.21.0 // indirect
-	golang.org/x/crypto v0.15.0 // indirect
-	golang.org/x/net v0.18.0 // indirect
-	golang.org/x/sys v0.14.0 // indirect
+	golang.org/x/crypto v0.18.0 // indirect
+	golang.org/x/net v0.20.0 // indirect
+	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/tools v0.15.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20231106174013-bbf56f31fb17 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240125205218-1f4bbc51befe // indirect
 	google.golang.org/protobuf v1.32.0 // indirect
 )
 
@@ -69,5 +69,3 @@ require (
 	go.uber.org/zap v1.26.0
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-replace github.com/ralvescosta/aws-ecs-fargate-hello-world/protos => ../protos

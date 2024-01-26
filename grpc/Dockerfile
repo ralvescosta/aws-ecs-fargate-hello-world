@@ -1,17 +1,17 @@
 FROM golang as build
 
-ENV APP_USER=appuser 
-
 WORKDIR /build
 COPY . .
-RUN go build -o=exec -ldflags "-s -w"
+RUN go build -o=/build/myapp -ldflags "-s -w"
 
 FROM alpine
 
-WORKDIR /app
-COPY .env* ./
-COPY --from=build /build/exec ./exec
-USER $APP_USER
+RUN adduser -D appuser
+WORKDIR /
+COPY .env* /
+COPY --from=build /build/myapp /myapp
+RUN chmod +x ./myapp
+USER appuser
 EXPOSE 5000
 
-CMD ["sh", "-c", "./exec"]
+CMD ["./myapp", "grpc"]
