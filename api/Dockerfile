@@ -9,6 +9,6 @@ FROM scratch
 WORKDIR /app
 COPY .env* ./
 COPY --from=build /build/myapp ./
-EXPOSE 5000
+EXPOSE 3333
 
-CMD ["./myapp", "grpc"]
+CMD ["./myapp", "api"]

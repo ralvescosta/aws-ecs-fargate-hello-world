@@ -16,7 +16,6 @@ import (
 
 func NewContainer() (*dig.Container, error) {
 	cfg, err := configsBuilder.NewConfigsBuilder().
-		HTTP().
 		Build()
 
 	if err != nil {
