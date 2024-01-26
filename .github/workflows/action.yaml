@@ -36,6 +36,7 @@ jobs:
         cd ${{ matrix.services }} && go build
 
   build:
+    needs: [ci]
     runs-on: ubuntu-latest
     strategy:
       matrix:
