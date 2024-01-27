@@ -1,0 +1,12 @@
+{
+  "language": "go",
+  "app": "go run main.go",
+  "codeMakerOutput": "generated",
+  "projectId": "cd9d13d7-8d1f-43b9-94d9-dba303a2f68e",
+  "sendCrashReports": "true",
+  "terraformProviders": [
+    "hashicorp/aws@~>5.0"
+  ],
+  "terraformModules": [],
+  "context": {}
+}
