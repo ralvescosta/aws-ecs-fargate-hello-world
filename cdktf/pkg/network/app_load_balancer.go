@@ -1,27 +1,21 @@
 package network
 
 import (
+	"fmt"
+
 	"github.com/aws/jsii-runtime-go"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/alb"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/alblistener"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/albtargetgroup"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/securitygroup"
-	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/subnet"
-	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/vpc"
-	"github.com/hashicorp/terraform-cdk-go/cdktf"
-	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/configs"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/stack"
 )
 
-func NewApplicationLoadBalancer(
-	cfg *configs.Configs,
-	tfStack cdktf.TerraformStack,
-	fnaVpc vpc.Vpc,
-	publicA subnet.Subnet,
-	publicB subnet.Subnet,
-) (albSecurityGroup securitygroup.SecurityGroup, targetGroup albtargetgroup.AlbTargetGroup, appLoadBalancer alb.Alb) {
-	albSecurityGroup = securitygroup.NewSecurityGroup(tfStack, jsii.String("fna-alb-sg"), &securitygroup.SecurityGroupConfig{
+func NewApplicationLoadBalancer(stack *stack.MyStack) {
+	secGroupName := fmt.Sprintf("%v-sec-group", stack.Cfgs.AppName)
+	stack.ElasticLoadBalancerSecGroup = securitygroup.NewSecurityGroup(stack.TfStack, jsii.String(secGroupName), &securitygroup.SecurityGroupConfig{
 		Description: jsii.String("Allows access from internet"),
-		VpcId:       fnaVpc.Id(),
+		VpcId:       stack.Vpc.Id(),
 		Ingress: []*securitygroup.SecurityGroupIngress{
 			{
 				Protocol:   jsii.String("HTTP"),
@@ -40,24 +34,23 @@ func NewApplicationLoadBalancer(
 		},
 	})
 
-	appLoadBalancer = alb.NewAlb(tfStack, jsii.String("fna-alb"), &alb.AlbConfig{
+	albName := fmt.Sprintf("%v-alb", stack.Cfgs.AppName)
+	stack.ElasticLoadBalancer = alb.NewAlb(stack.TfStack, jsii.String(albName), &alb.AlbConfig{
 		EnableHttp2:      true,
 		Internal:         false,
 		LoadBalancerType: jsii.String("application"),
 		IpAddressType:    jsii.String("ipv4"),
 		SubnetMapping: []*alb.AlbSubnetMapping{
 			{
-				SubnetId: publicA.Id(),
-			},
-			{
-				SubnetId: publicB.Id(),
+				SubnetId: stack.PublicSubnet.Id(),
 			},
 		},
-		SecurityGroups: &[]*string{albSecurityGroup.Id()},
+		SecurityGroups: &[]*string{stack.ElasticLoadBalancerSecGroup.Id()},
 	})
 
-	targetGroup = albtargetgroup.NewAlbTargetGroup(tfStack, jsii.String("fna-alb-tg"), &albtargetgroup.AlbTargetGroupConfig{
-		VpcId:           fnaVpc.Id(),
+	albTargetGroupName := fmt.Sprintf("%v-alb-tg", stack.Cfgs.AppName)
+	stack.ElasticLoadBalancerTargetGroup = albtargetgroup.NewAlbTargetGroup(stack.TfStack, jsii.String(albTargetGroupName), &albtargetgroup.AlbTargetGroupConfig{
+		VpcId:           stack.Vpc.Id(),
 		TargetType:      jsii.String("ip"),
 		Protocol:        jsii.String("HTTP"),
 		ProtocolVersion: jsii.String("HTTP1"),
@@ -69,17 +62,16 @@ func NewApplicationLoadBalancer(
 		},
 	})
 
-	alblistener.NewAlbListener(tfStack, jsii.String("fna-alb-l"), &alblistener.AlbListenerConfig{
-		LoadBalancerArn: appLoadBalancer.Arn(),
+	albListenerName := fmt.Sprintf("%v-alb-listener", stack.Cfgs.AppName)
+	alblistener.NewAlbListener(stack.TfStack, jsii.String(albListenerName), &alblistener.AlbListenerConfig{
+		LoadBalancerArn: stack.ElasticLoadBalancer.Arn(),
 		Protocol:        jsii.String("HTTP"),
 		Port:            jsii.Number(80),
 		DefaultAction: []*alblistener.AlbListenerDefaultAction{
 			{
 				Type:           jsii.String("forward"),
-				TargetGroupArn: targetGroup.Arn(),
+				TargetGroupArn: stack.ElasticLoadBalancerSecGroup.Arn(),
 			},
 		},
 	})
-
-	return
 }
