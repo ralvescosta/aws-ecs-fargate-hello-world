@@ -2,29 +2,15 @@ package ecs
 
 import (
 	"github.com/aws/jsii-runtime-go"
-	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/alb"
-	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/albtargetgroup"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/ecscluster"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/ecsservice"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/ecstaskdefinition"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/securitygroup"
-	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/subnet"
-	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/vpc"
-	"github.com/hashicorp/terraform-cdk-go/cdktf"
-	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/configs"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/stack"
 )
 
-func NewECSFargate(
-	cfgs *configs.Configs,
-	tfStack cdktf.TerraformStack,
-	fnaVpc vpc.Vpc,
-	privateA subnet.Subnet,
-	privateB subnet.Subnet,
-	fnaAlbTargetGroup albtargetgroup.AlbTargetGroup,
-	fnaAlbSecGroup securitygroup.SecurityGroup,
-	fnaAlb alb.Alb,
-) {
-	cluster := ecscluster.NewEcsCluster(tfStack, jsii.String("fna-ecs-cluster"), &ecscluster.EcsClusterConfig{
+func NewECSFargate(stack *stack.MyStack) {
+	cluster := ecscluster.NewEcsCluster(stack.TfStack, jsii.String("fna-ecs-cluster"), &ecscluster.EcsClusterConfig{
 		Name: jsii.String("fna-ecs-cluster"),
 		Setting: []*ecscluster.EcsClusterSetting{
 			{
@@ -34,7 +20,7 @@ func NewECSFargate(
 		},
 	})
 
-	td := ecstaskdefinition.NewEcsTaskDefinition(tfStack, jsii.String("fna-td"), &ecstaskdefinition.EcsTaskDefinitionConfig{
+	td := ecstaskdefinition.NewEcsTaskDefinition(stack.TfStack, jsii.String("fna-td"), &ecstaskdefinition.EcsTaskDefinitionConfig{
 		Family:                  jsii.String("service"),
 		Cpu:                     jsii.String("0.5"),
 		Memory:                  jsii.String("128M"),
@@ -51,13 +37,13 @@ func NewECSFargate(
 		`),
 	})
 
-	secGroup := securitygroup.NewSecurityGroup(tfStack, jsii.String("fna-ecs-sg"), &securitygroup.SecurityGroupConfig{
+	secGroup := securitygroup.NewSecurityGroup(stack.TfStack, jsii.String("fna-ecs-sg"), &securitygroup.SecurityGroupConfig{
 		Ingress: &[]*securitygroup.SecurityGroupIngress{
 			{
 				Protocol:       jsii.String("tcp"),
 				FromPort:       jsii.Number(0),
 				ToPort:         jsii.Number(6553),
-				SecurityGroups: &[]*string{fnaAlbSecGroup.Id()},
+				SecurityGroups: &[]*string{stack.ElasticLoadBalancerSecGroup.Id()},
 			},
 		},
 		Egress: &[]*securitygroup.SecurityGroupEgress{
@@ -70,7 +56,7 @@ func NewECSFargate(
 		},
 	})
 
-	ecsservice.NewEcsService(tfStack, jsii.String("fna-svc"), &ecsservice.EcsServiceConfig{
+	ecsservice.NewEcsService(stack.TfStack, jsii.String("fna-svc"), &ecsservice.EcsServiceConfig{
 		Name:           jsii.String("fna-svc"),
 		Cluster:        cluster.Id(),
 		TaskDefinition: td.Arn(),
@@ -80,13 +66,13 @@ func NewECSFargate(
 			Type: jsii.String("ECS"),
 		},
 		NetworkConfiguration: &ecsservice.EcsServiceNetworkConfiguration{
-			Subnets:        &[]*string{privateA.Id(), privateB.Id()},
+			Subnets:        &[]*string{stack.PrivateSubnet.Id()},
 			SecurityGroups: &[]*string{secGroup.Id()},
 		},
 		LoadBalancer: &[]*ecsservice.EcsServiceLoadBalancer{
 			{
-				ElbName:        fnaAlb.Name(),
-				TargetGroupArn: fnaAlbTargetGroup.Arn(),
+				ElbName:        stack.ElasticLoadBalancer.Name(),
+				TargetGroupArn: stack.ElasticLoadBalancerSecGroup.Arn(),
 				ContainerName:  jsii.String("fna-nginx"),
 				ContainerPort:  jsii.Number(80),
 			},
