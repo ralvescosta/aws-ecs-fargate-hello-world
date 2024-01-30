@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	logger := zap.S()
+	logger := zap.S().Named("cdktf")
 
 	cfgs := configs.NewConfigs(logger)
 
