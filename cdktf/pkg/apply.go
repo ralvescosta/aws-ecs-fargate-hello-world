@@ -4,13 +4,16 @@ import (
 	"github.com/hashicorp/terraform-cdk-go/cdktf"
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/configs"
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/ecs"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/ecs/containers"
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/network"
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/stack"
+	"go.uber.org/zap"
 )
 
-func ApplyStack(cfgs *configs.Configs, tfStack cdktf.TerraformStack) {
+func ApplyStack(logger *zap.SugaredLogger, cfgs *configs.Configs, tfStack cdktf.TerraformStack) {
 	myStack := stack.MyStack{
 		Cfgs:    cfgs,
+		Logger:  logger,
 		TfStack: tfStack,
 	}
 
@@ -20,5 +23,6 @@ func ApplyStack(cfgs *configs.Configs, tfStack cdktf.TerraformStack) {
 	network.NewNatGateway(&myStack)
 	network.NewRouteTables(&myStack)
 	network.NewApplicationLoadBalancer(&myStack)
-	ecs.NewECSFargate(&myStack)
+	ecs.NewECSFargateCluster(&myStack)
+	containers.NewEcsContainers(&myStack)
 }

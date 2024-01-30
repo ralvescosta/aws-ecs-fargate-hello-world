@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"os"
+
+	"go.uber.org/zap"
 )
 
 type Configs struct {
@@ -25,39 +27,40 @@ type Configs struct {
 	PublicSubnetAZ   string
 }
 
-func NewConfigs() *Configs {
+func NewConfigs(logger *zap.SugaredLogger) *Configs {
 	return &Configs{
-		AppName:  requiredEnv("APP_NAME"),
-		LogLevel: envOrDefault("LOG_LEVEL", "debug"),
+		AppName:  requiredEnv(logger, "APP_NAME"),
+		LogLevel: envOrDefault(logger, "LOG_LEVEL", "debug"),
 
-		Region:                     requiredEnv("AWS_REGION"),
-		AccessKey:                  requiredEnv("AWS_ACCESS_KEY"),
-		SecretKey:                  requiredEnv("AWS_SECRET_KEY"),
-		TerraformCloudHostname:     requiredEnv("TERRAFORM_CLOUD_HOSTNAME"),
-		TerraformCloudOrganization: requiredEnv("TERRAFORM_CLOUD_ORGANIZATION"),
+		Region:                     requiredEnv(logger, "AWS_REGION"),
+		AccessKey:                  requiredEnv(logger, "AWS_ACCESS_KEY"),
+		SecretKey:                  requiredEnv(logger, "AWS_SECRET_KEY"),
+		TerraformCloudHostname:     requiredEnv(logger, "TERRAFORM_CLOUD_HOSTNAME"),
+		TerraformCloudOrganization: requiredEnv(logger, "TERRAFORM_CLOUD_ORGANIZATION"),
 
-		VpcCIDR:           requiredEnv("VPC_CIDR"),
-		PrivateSubnetCIDR: requiredEnv("PRIVATE_SUBNET_CIDR"),
-		PrivateSubnetAZ:   requiredEnv("PRIVATE_SUBNET_AZ"),
-		PublicSubnetCIDR:  requiredEnv("PUBLIC_SUBNET_CIDR"),
-		PublicSubnetAZ:    requiredEnv("PUBLIC_SUBNET_AZ"),
+		VpcCIDR:           requiredEnv(logger, "VPC_CIDR"),
+		PrivateSubnetCIDR: requiredEnv(logger, "PRIVATE_SUBNET_CIDR"),
+		PrivateSubnetAZ:   requiredEnv(logger, "PRIVATE_SUBNET_AZ"),
+		PublicSubnetCIDR:  requiredEnv(logger, "PUBLIC_SUBNET_CIDR"),
+		PublicSubnetAZ:    requiredEnv(logger, "PUBLIC_SUBNET_AZ"),
 	}
 }
 
-func requiredEnv(envKey string) string {
+func requiredEnv(logger *zap.SugaredLogger, envKey string) string {
 	value := os.Getenv(envKey)
 
 	if value == "" {
-		panic(errors.New(fmt.Sprintf("env %v is required, but was founded empty", envKey)))
+		logger.Panic(errors.New(fmt.Sprintf("env %v is required, but was founded empty", envKey)))
 	}
 
 	return value
 }
 
-func envOrDefault(envKey, def string) string {
+func envOrDefault(logger *zap.SugaredLogger, envKey, def string) string {
 	value := os.Getenv(envKey)
 
 	if value != "" {
+		logger.Debug(fmt.Sprintf("env key %v without value, assuming the default value", envKey))
 		return value
 	}
 
