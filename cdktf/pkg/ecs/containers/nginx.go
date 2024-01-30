@@ -1,26 +1,18 @@
-package ecs
+package containers
 
 import (
+	"fmt"
+
 	"github.com/aws/jsii-runtime-go"
-	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/ecscluster"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/ecsservice"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/ecstaskdefinition"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/securitygroup"
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/stack"
 )
 
-func NewECSFargate(stack *stack.MyStack) {
-	cluster := ecscluster.NewEcsCluster(stack.TfStack, jsii.String("fna-ecs-cluster"), &ecscluster.EcsClusterConfig{
-		Name: jsii.String("fna-ecs-cluster"),
-		Setting: []*ecscluster.EcsClusterSetting{
-			{
-				Name:  jsii.String("containerInsights"),
-				Value: jsii.String("enabled"),
-			},
-		},
-	})
-
-	td := ecstaskdefinition.NewEcsTaskDefinition(stack.TfStack, jsii.String("fna-td"), &ecstaskdefinition.EcsTaskDefinitionConfig{
+func NewNginxContainer(stack *stack.MyStack) {
+	ecsNginxTaskDefinitionName := fmt.Sprintf("%v-ecs-nginx-td", stack.Cfgs.AppName)
+	td := ecstaskdefinition.NewEcsTaskDefinition(stack.TfStack, jsii.String(ecsNginxTaskDefinitionName), &ecstaskdefinition.EcsTaskDefinitionConfig{
 		Family:                  jsii.String("service"),
 		Cpu:                     jsii.String("0.5"),
 		Memory:                  jsii.String("128M"),
@@ -37,7 +29,8 @@ func NewECSFargate(stack *stack.MyStack) {
 		`),
 	})
 
-	secGroup := securitygroup.NewSecurityGroup(stack.TfStack, jsii.String("fna-ecs-sg"), &securitygroup.SecurityGroupConfig{
+	ecsTaskDefinitionSecGroupName := fmt.Sprintf("%v-ecs-nginx-sec-group", stack.Cfgs.AppName)
+	secGroup := securitygroup.NewSecurityGroup(stack.TfStack, jsii.String(ecsTaskDefinitionSecGroupName), &securitygroup.SecurityGroupConfig{
 		Ingress: &[]*securitygroup.SecurityGroupIngress{
 			{
 				Protocol:       jsii.String("tcp"),
@@ -56,9 +49,10 @@ func NewECSFargate(stack *stack.MyStack) {
 		},
 	})
 
-	ecsservice.NewEcsService(stack.TfStack, jsii.String("fna-svc"), &ecsservice.EcsServiceConfig{
-		Name:           jsii.String("fna-svc"),
-		Cluster:        cluster.Id(),
+	ecsServiceName := fmt.Sprintf("%v-ecs-nginx-svc", stack.Cfgs.AppName)
+	ecsservice.NewEcsService(stack.TfStack, jsii.String(ecsServiceName), &ecsservice.EcsServiceConfig{
+		Name:           jsii.String(ecsServiceName),
+		Cluster:        stack.EcsCluster.Id(),
 		TaskDefinition: td.Arn(),
 		LaunchType:     jsii.String("FARGATE"),
 		DesiredCount:   jsii.Number(2),

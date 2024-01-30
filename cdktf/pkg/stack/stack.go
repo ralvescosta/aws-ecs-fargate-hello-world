@@ -3,6 +3,7 @@ package stack
 import (
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/alb"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/albtargetgroup"
+	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/ecscluster"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/internetgateway"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/natgateway"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/routetable"
@@ -11,10 +12,12 @@ import (
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/vpc"
 	"github.com/hashicorp/terraform-cdk-go/cdktf"
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/configs"
+	"go.uber.org/zap"
 )
 
 type MyStack struct {
-	Cfgs *configs.Configs
+	Cfgs   *configs.Configs
+	Logger *zap.SugaredLogger
 
 	TfStack cdktf.TerraformStack
 
@@ -28,4 +31,5 @@ type MyStack struct {
 	ElasticLoadBalancerSecGroup    securitygroup.SecurityGroup
 	ElasticLoadBalancerTargetGroup albtargetgroup.AlbTargetGroup
 	ElasticLoadBalancer            alb.Alb
+	EcsCluster                     ecscluster.EcsCluster
 }
