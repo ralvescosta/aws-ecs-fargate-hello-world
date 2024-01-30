@@ -1,36 +1,25 @@
 package network
 
 import (
+	"fmt"
+
 	"github.com/aws/jsii-runtime-go"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/eip"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/natgateway"
-	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/subnet"
-	"github.com/hashicorp/terraform-cdk-go/cdktf"
-	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/configs"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/stack"
 )
 
-func NewNatGateway(cfgs *configs.Configs, tfStack cdktf.TerraformStack, publicA subnet.Subnet, publicB subnet.Subnet) (
-	natGatewayA natgateway.NatGateway,
-	natGatewayB natgateway.NatGateway,
-) {
-	natGatewayA = natgateway.NewNatGateway(tfStack, jsii.String(cfgs.NatGatewayA.Name), &natgateway.NatGatewayConfig{
-		SubnetId:         publicA.Id(),
+func NewNatGateway(stack *stack.MyStack) {
+	natGatewayName := fmt.Sprintf("%v-net-g", stack.Cfgs.AppName)
+	stack.NatGateway = natgateway.NewNatGateway(stack.TfStack, jsii.String(natGatewayName), &natgateway.NatGatewayConfig{
+		SubnetId:         stack.PrivateSubnet.Id(),
 		ConnectivityType: jsii.String("public"),
 	})
 
-	natGatewayB = natgateway.NewNatGateway(tfStack, jsii.String(cfgs.NatGatewayB.Name), &natgateway.NatGatewayConfig{
-		SubnetId:         publicB.Id(),
-		ConnectivityType: jsii.String("public"),
-	})
-
-	eip.NewEip(tfStack, jsii.String(cfgs.NatGatewayA.ElasticIpName), &eip.EipConfig{
+	eipName := fmt.Sprintf("%v-net-g-eip", stack.Cfgs.AppName)
+	eip.NewEip(stack.TfStack, jsii.String(eipName), &eip.EipConfig{
 		Domain:   jsii.String("vpc"),
-		Instance: natGatewayA.Id(),
-	})
-
-	eip.NewEip(tfStack, jsii.String(cfgs.NatGatewayB.ElasticIpName), &eip.EipConfig{
-		Domain:   jsii.String("vpc"),
-		Instance: natGatewayB.Id(),
+		Instance: stack.NatGateway.Id(),
 	})
 
 	return
