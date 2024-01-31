@@ -3,6 +3,7 @@ package pkg
 import (
 	"github.com/hashicorp/terraform-cdk-go/cdktf"
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/configs"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/ecr"
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/ecs"
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/ecs/containers"
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/network"
@@ -23,6 +24,7 @@ func ApplyStack(logger *zap.SugaredLogger, cfgs *configs.Configs, tfStack cdktf.
 	network.NewNatGateway(&myStack)
 	network.NewRouteTables(&myStack)
 	network.NewApplicationLoadBalancer(&myStack)
+	ecr.NewECRRepositories(&myStack)
 	ecs.NewECSFargateCluster(&myStack)
 	containers.NewEcsContainers(&myStack)
 }

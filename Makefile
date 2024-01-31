@@ -8,10 +8,10 @@ init:
 
 
 reset:
-	@mv ./cdktf/generated ../../generated
+	@mv ./cdktf/generated ./generated
 	@killall gopls
-	@slep 2
-	@mv ../../generated ./cdktf/generated
+	@sleep 2
+	@mv ./generated ./cdktf
 
 swagger-gen:
 	@cd ./api && swag init && cd ../
@@ -23,8 +23,14 @@ protoc:
 		--experimental_allow_proto3_optional \
     ./protos/def/service.proto
 
-run-api:
+api:
+	@cd api
 	@GO_ENV=local go run ./api/main.go api
 
-run-grpc:
+grpc:
+	@cd grpc
 	@GO_ENV=local go run ./grpc/main.go grpc
+
+cdktf:
+	@cd cdktf
+	@GO_ENV=staging cdktf plan
