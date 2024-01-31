@@ -10,13 +10,13 @@ import (
 )
 
 func NewNatGateway(stack *stack.MyStack) {
-	natGatewayName := fmt.Sprintf("%v-net-g", stack.Cfgs.AppName)
+	natGatewayName := fmt.Sprintf("%v-nat-g", stack.Cfgs.AppName)
 	stack.NatGateway = natgateway.NewNatGateway(stack.TfStack, jsii.String(natGatewayName), &natgateway.NatGatewayConfig{
 		SubnetId:         stack.PrivateSubnet.Id(),
 		ConnectivityType: jsii.String("public"),
 	})
 
-	eipName := fmt.Sprintf("%v-net-g-eip", stack.Cfgs.AppName)
+	eipName := fmt.Sprintf("%v-nat-g-eip", stack.Cfgs.AppName)
 	eip.NewEip(stack.TfStack, jsii.String(eipName), &eip.EipConfig{
 		Domain:   jsii.String("vpc"),
 		Instance: stack.NatGateway.Id(),

@@ -11,6 +11,17 @@
         "GO_ENV": "local"
       },
       "args": ["api", ""]
+    },
+    {
+      "name": "CDKTF",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cdktf",
+      "env": {
+        "GO_ENV": "staging"
+      },
+      "args": ["api", ""]
     }
   ]
 }

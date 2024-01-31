@@ -8,10 +8,10 @@ init:
 
 
 reset:
-	@mv ./cdktf/generated ../../generated
+	@mv ./cdktf/generated ./generated
 	@killall gopls
-	@slep 2
-	@mv ../../generated ./cdktf/generated
+	@sleep 2
+	@mv ./generated ./cdktf
 
 swagger-gen:
 	@cd ./api && swag init && cd ../

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ralvescosta/dotenv"
 	"go.uber.org/zap"
 )
 
@@ -13,8 +14,6 @@ type Configs struct {
 	LogLevel string
 
 	Region                     string
-	AccessKey                  string
-	SecretKey                  string
 	TerraformCloudHostname     string
 	TerraformCloudOrganization string
 
@@ -27,14 +26,21 @@ type Configs struct {
 	PublicSubnetAZ   string
 }
 
-func NewConfigs(logger *zap.SugaredLogger) *Configs {
+func NewConfigs() (*Configs, *zap.SugaredLogger) {
+	logger := zap.S().Named("cdktf")
+
+	goEnv := envOrDefault(logger, "GO_ENV", "staging")
+
+	dotenv.Configure(fmt.Sprintf("./.env.%v", goEnv))
+
+	logLevel := envOrDefault(logger, "LOG_LEVEL", "debug")
+	appName := requiredEnv(logger, "APP_NAME")
+
 	return &Configs{
-		AppName:  requiredEnv(logger, "APP_NAME"),
-		LogLevel: envOrDefault(logger, "LOG_LEVEL", "debug"),
+		AppName:  appName,
+		LogLevel: logLevel,
 
 		Region:                     requiredEnv(logger, "AWS_REGION"),
-		AccessKey:                  requiredEnv(logger, "AWS_ACCESS_KEY"),
-		SecretKey:                  requiredEnv(logger, "AWS_SECRET_KEY"),
 		TerraformCloudHostname:     requiredEnv(logger, "TERRAFORM_CLOUD_HOSTNAME"),
 		TerraformCloudOrganization: requiredEnv(logger, "TERRAFORM_CLOUD_ORGANIZATION"),
 
@@ -43,7 +49,7 @@ func NewConfigs(logger *zap.SugaredLogger) *Configs {
 		PrivateSubnetAZ:   requiredEnv(logger, "PRIVATE_SUBNET_AZ"),
 		PublicSubnetCIDR:  requiredEnv(logger, "PUBLIC_SUBNET_CIDR"),
 		PublicSubnetAZ:    requiredEnv(logger, "PUBLIC_SUBNET_AZ"),
-	}
+	}, logger
 }
 
 func requiredEnv(logger *zap.SugaredLogger, envKey string) string {
