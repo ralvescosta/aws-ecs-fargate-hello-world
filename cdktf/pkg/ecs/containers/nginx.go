@@ -14,8 +14,8 @@ func NewNginxContainer(stack *stack.MyStack) {
 	ecsNginxTaskDefinitionName := fmt.Sprintf("%v-ecs-nginx-td", stack.Cfgs.AppName)
 	td := ecstaskdefinition.NewEcsTaskDefinition(stack.TfStack, jsii.String(ecsNginxTaskDefinitionName), &ecstaskdefinition.EcsTaskDefinitionConfig{
 		Family:                  jsii.String("service"),
-		Cpu:                     jsii.String("0.5"),
-		Memory:                  jsii.String("128M"),
+		Cpu:                     jsii.String("10"),
+		Memory:                  jsii.String("128"),
 		NetworkMode:             jsii.String("awsvpc"),
 		RequiresCompatibilities: jsii.Strings("FARGATE"),
 		ContainerDefinitions: jsii.String(`
@@ -31,20 +31,21 @@ func NewNginxContainer(stack *stack.MyStack) {
 
 	ecsTaskDefinitionSecGroupName := fmt.Sprintf("%v-ecs-nginx-sec-group", stack.Cfgs.AppName)
 	secGroup := securitygroup.NewSecurityGroup(stack.TfStack, jsii.String(ecsTaskDefinitionSecGroupName), &securitygroup.SecurityGroupConfig{
+		VpcId: stack.Vpc.Id(),
 		Ingress: &[]*securitygroup.SecurityGroupIngress{
 			{
-				Protocol:       jsii.String("tcp"),
+				Protocol:       jsii.String("TCP"),
 				FromPort:       jsii.Number(0),
-				ToPort:         jsii.Number(6553),
+				ToPort:         jsii.Number(65535),
 				SecurityGroups: &[]*string{stack.ElasticLoadBalancerSecGroup.Id()},
 			},
 		},
 		Egress: &[]*securitygroup.SecurityGroupEgress{
 			{
-				Protocol:   jsii.String("tcp"),
+				Protocol:   jsii.String("TCP"),
 				CidrBlocks: jsii.Strings("0.0.0.0/0"),
-				ToPort:     jsii.Number(0),
-				FromPort:   jsii.Number(6553),
+				FromPort:   jsii.Number(0),
+				ToPort:     jsii.Number(65535),
 			},
 		},
 	})

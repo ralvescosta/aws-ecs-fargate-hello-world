@@ -18,18 +18,18 @@ func NewApplicationLoadBalancer(stack *stack.MyStack) {
 		VpcId:       stack.Vpc.Id(),
 		Ingress: []*securitygroup.SecurityGroupIngress{
 			{
-				Protocol:   jsii.String("HTTP"),
+				Protocol:   jsii.String("TCP"),
 				CidrBlocks: jsii.Strings("0.0.0.0/0"),
-				ToPort:     jsii.Number(80),
 				FromPort:   jsii.Number(80),
+				ToPort:     jsii.Number(80),
 			},
 		},
 		Egress: []*securitygroup.SecurityGroupEgress{
 			{
-				Protocol:   jsii.String("HTTP"),
+				Protocol:   jsii.String("TCP"),
 				CidrBlocks: jsii.Strings("0.0.0.0/0"),
-				ToPort:     jsii.Number(0),
-				FromPort:   jsii.Number(65_535),
+				FromPort:   jsii.Number(0),
+				ToPort:     jsii.Number(65535),
 			},
 		},
 	})
@@ -44,6 +44,9 @@ func NewApplicationLoadBalancer(stack *stack.MyStack) {
 			{
 				SubnetId: stack.PublicSubnet.Id(),
 			},
+			{
+				SubnetId: stack.PrivateSubnet.Id(),
+			},
 		},
 		SecurityGroups: &[]*string{stack.ElasticLoadBalancerSecGroup.Id()},
 	})
@@ -57,7 +60,7 @@ func NewApplicationLoadBalancer(stack *stack.MyStack) {
 		Port:            jsii.Number(80),
 		HealthCheck: &albtargetgroup.AlbTargetGroupHealthCheck{
 			Enabled: true,
-			Path:    jsii.String("/health"),
+			Path:    jsii.String("/"),
 			Port:    jsii.String("80"),
 		},
 	})
