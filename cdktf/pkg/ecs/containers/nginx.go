@@ -37,7 +37,7 @@ func NewNginxContainer(stack *stack.MyStack) {
 				Protocol:       jsii.String("TCP"),
 				FromPort:       jsii.Number(0),
 				ToPort:         jsii.Number(65535),
-				SecurityGroups: &[]*string{stack.ElasticLoadBalancerSecGroup.Id()},
+				SecurityGroups: &[]*string{stack.PublicAppLoadBalancer.SecGroup.Id()},
 			},
 		},
 		Egress: &[]*securitygroup.SecurityGroupEgress{
@@ -66,8 +66,8 @@ func NewNginxContainer(stack *stack.MyStack) {
 		},
 		LoadBalancer: &[]*ecsservice.EcsServiceLoadBalancer{
 			{
-				ElbName:        stack.ElasticLoadBalancer.Name(),
-				TargetGroupArn: stack.ElasticLoadBalancerSecGroup.Arn(),
+				ElbName:        stack.PublicAppLoadBalancer.Alb.Name(),
+				TargetGroupArn: stack.PublicAppLoadBalancer.SecGroup.Arn(),
 				ContainerName:  jsii.String("fna-nginx"),
 				ContainerPort:  jsii.Number(80),
 			},

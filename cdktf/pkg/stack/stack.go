@@ -16,23 +16,30 @@ import (
 	"go.uber.org/zap"
 )
 
-type MyStack struct {
-	Cfgs   *configs.Configs
-	Logger *zap.SugaredLogger
+type (
+	ApplicationLoadBalancer struct {
+		SecGroup    securitygroup.SecurityGroup
+		TargetGroup albtargetgroup.AlbTargetGroup
+		Alb         alb.Alb
+	}
 
-	TfStack cdktf.TerraformStack
+	MyStack struct {
+		Cfgs   *configs.Configs
+		Logger *zap.SugaredLogger
 
-	Vpc                            vpc.Vpc
-	PrivateSubnet                  subnet.Subnet
-	PublicSubnet                   subnet.Subnet
-	InternetGateway                internetgateway.InternetGateway
-	NatGateway                     natgateway.NatGateway
-	PrivateRouteTable              routetable.RouteTable
-	PublicRouteTable               routetable.RouteTable
-	ElasticLoadBalancerSecGroup    securitygroup.SecurityGroup
-	ElasticLoadBalancerTargetGroup albtargetgroup.AlbTargetGroup
-	ElasticLoadBalancer            alb.Alb
-	EcsCluster                     ecscluster.EcsCluster
-	EcrAPIRepository               ecrrepository.EcrRepository
-	EcrGrpcRepository              ecrrepository.EcrRepository
-}
+		TfStack cdktf.TerraformStack
+
+		Vpc                    vpc.Vpc
+		PrivateSubnet          subnet.Subnet
+		PublicSubnet           subnet.Subnet
+		InternetGateway        internetgateway.InternetGateway
+		NatGateway             natgateway.NatGateway
+		PrivateRouteTable      routetable.RouteTable
+		PublicRouteTable       routetable.RouteTable
+		PublicAppLoadBalancer  *ApplicationLoadBalancer
+		PrivateAppLoadBalancer *ApplicationLoadBalancer
+		EcsCluster             ecscluster.EcsCluster
+		EcrAPIRepository       ecrrepository.EcrRepository
+		EcrGrpcRepository      ecrrepository.EcrRepository
+	}
+)

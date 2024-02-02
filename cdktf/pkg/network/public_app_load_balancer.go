@@ -11,9 +11,9 @@ import (
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/stack"
 )
 
-func NewApplicationLoadBalancer(stack *stack.MyStack) {
-	secGroupName := fmt.Sprintf("%v-sec-group", stack.Cfgs.AppName)
-	stack.ElasticLoadBalancerSecGroup = securitygroup.NewSecurityGroup(stack.TfStack, jsii.String(secGroupName), &securitygroup.SecurityGroupConfig{
+func NewPublicApplicationLoadBalancer(stack *stack.MyStack) {
+	secGroupName := fmt.Sprintf("%v-alb-sec-group", stack.Cfgs.AppName)
+	stack.PublicAppLoadBalancer.SecGroup = securitygroup.NewSecurityGroup(stack.TfStack, jsii.String(secGroupName), &securitygroup.SecurityGroupConfig{
 		Description: jsii.String("Allows access from internet"),
 		VpcId:       stack.Vpc.Id(),
 		Ingress: []*securitygroup.SecurityGroupIngress{
@@ -22,6 +22,12 @@ func NewApplicationLoadBalancer(stack *stack.MyStack) {
 				CidrBlocks: jsii.Strings("0.0.0.0/0"),
 				FromPort:   jsii.Number(80),
 				ToPort:     jsii.Number(80),
+			},
+			{
+				Protocol:   jsii.String("TCP"),
+				CidrBlocks: jsii.Strings("0.0.0.0/0"),
+				FromPort:   jsii.Number(443),
+				ToPort:     jsii.Number(443),
 			},
 		},
 		Egress: []*securitygroup.SecurityGroupEgress{
@@ -35,7 +41,7 @@ func NewApplicationLoadBalancer(stack *stack.MyStack) {
 	})
 
 	albName := fmt.Sprintf("%v-alb", stack.Cfgs.AppName)
-	stack.ElasticLoadBalancer = alb.NewAlb(stack.TfStack, jsii.String(albName), &alb.AlbConfig{
+	stack.PublicAppLoadBalancer.Alb = alb.NewAlb(stack.TfStack, jsii.String(albName), &alb.AlbConfig{
 		EnableHttp2:      true,
 		Internal:         false,
 		LoadBalancerType: jsii.String("application"),
@@ -48,11 +54,11 @@ func NewApplicationLoadBalancer(stack *stack.MyStack) {
 				SubnetId: stack.PrivateSubnet.Id(),
 			},
 		},
-		SecurityGroups: &[]*string{stack.ElasticLoadBalancerSecGroup.Id()},
+		SecurityGroups: &[]*string{stack.PublicAppLoadBalancer.SecGroup.Id()},
 	})
 
 	albTargetGroupName := fmt.Sprintf("%v-alb-tg", stack.Cfgs.AppName)
-	stack.ElasticLoadBalancerTargetGroup = albtargetgroup.NewAlbTargetGroup(stack.TfStack, jsii.String(albTargetGroupName), &albtargetgroup.AlbTargetGroupConfig{
+	stack.PublicAppLoadBalancer.TargetGroup = albtargetgroup.NewAlbTargetGroup(stack.TfStack, jsii.String(albTargetGroupName), &albtargetgroup.AlbTargetGroupConfig{
 		VpcId:           stack.Vpc.Id(),
 		TargetType:      jsii.String("ip"),
 		Protocol:        jsii.String("HTTP"),
@@ -67,13 +73,13 @@ func NewApplicationLoadBalancer(stack *stack.MyStack) {
 
 	albListenerName := fmt.Sprintf("%v-alb-listener", stack.Cfgs.AppName)
 	alblistener.NewAlbListener(stack.TfStack, jsii.String(albListenerName), &alblistener.AlbListenerConfig{
-		LoadBalancerArn: stack.ElasticLoadBalancer.Arn(),
+		LoadBalancerArn: stack.PublicAppLoadBalancer.Alb.Arn(),
 		Protocol:        jsii.String("HTTP"),
 		Port:            jsii.Number(80),
 		DefaultAction: []*alblistener.AlbListenerDefaultAction{
 			{
 				Type:           jsii.String("forward"),
-				TargetGroupArn: stack.ElasticLoadBalancerSecGroup.Arn(),
+				TargetGroupArn: stack.PublicAppLoadBalancer.SecGroup.Arn(),
 			},
 		},
 	})

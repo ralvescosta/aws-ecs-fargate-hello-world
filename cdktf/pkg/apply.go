@@ -13,9 +13,11 @@ import (
 
 func ApplyStack(logger *zap.SugaredLogger, cfgs *configs.Configs, tfStack cdktf.TerraformStack) {
 	myStack := stack.MyStack{
-		Cfgs:    cfgs,
-		Logger:  logger,
-		TfStack: tfStack,
+		Cfgs:                   cfgs,
+		Logger:                 logger,
+		TfStack:                tfStack,
+		PublicAppLoadBalancer:  &stack.ApplicationLoadBalancer{},
+		PrivateAppLoadBalancer: &stack.ApplicationLoadBalancer{},
 	}
 
 	network.NewVpc(&myStack)
@@ -23,7 +25,7 @@ func ApplyStack(logger *zap.SugaredLogger, cfgs *configs.Configs, tfStack cdktf.
 	network.NewInternetGateway(&myStack)
 	network.NewNatGateway(&myStack)
 	network.NewRouteTables(&myStack)
-	network.NewApplicationLoadBalancer(&myStack)
+	network.NewPublicApplicationLoadBalancer(&myStack)
 	ecr.NewECRRepositories(&myStack)
 	ecs.NewECSFargateCluster(&myStack)
 	containers.NewEcsContainers(&myStack)
