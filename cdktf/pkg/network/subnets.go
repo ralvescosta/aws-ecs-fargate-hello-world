@@ -9,15 +9,15 @@ import (
 )
 
 func NewSubnets(stack *stack.MyStack) {
-	privateSubNetName := fmt.Sprintf("%v-private-sbnt", stack.Cfgs.AppName)
-	stack.PrivateSubnet = subnet.NewSubnet(stack.TfStack, jsii.Sprintf(privateSubNetName), &subnet.SubnetConfig{
+	privateSubNetName := fmt.Sprintf("%v-private-a-sbnt", stack.Cfgs.AppName)
+	stack.Subnets.PrivateA = subnet.NewSubnet(stack.TfStack, jsii.Sprintf(privateSubNetName), &subnet.SubnetConfig{
 		VpcId:            stack.Vpc.Id(),
 		CidrBlock:        jsii.String(stack.Cfgs.PrivateSubnetCIDR),
 		AvailabilityZone: jsii.String(stack.Cfgs.PrivateSubnetAZ),
 	})
 
 	publicSubNetName := fmt.Sprintf("%v-public-sbnt", stack.Cfgs.AppName)
-	stack.PublicSubnet = subnet.NewSubnet(stack.TfStack, jsii.Sprintf(publicSubNetName), &subnet.SubnetConfig{
+	stack.Subnets.Public = subnet.NewSubnet(stack.TfStack, jsii.Sprintf(publicSubNetName), &subnet.SubnetConfig{
 		VpcId:            stack.Vpc.Id(),
 		CidrBlock:        jsii.Sprintf(stack.Cfgs.PublicSubnetCIDR),
 		AvailabilityZone: jsii.String(stack.Cfgs.PublicSubnetAZ),

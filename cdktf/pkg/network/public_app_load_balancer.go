@@ -48,10 +48,10 @@ func NewPublicApplicationLoadBalancer(stack *stack.MyStack) {
 		IpAddressType:    jsii.String("ipv4"),
 		SubnetMapping: []*alb.AlbSubnetMapping{
 			{
-				SubnetId: stack.PublicSubnet.Id(),
+				SubnetId: stack.Subnets.PrivateA.Id(),
 			},
 			{
-				SubnetId: stack.PrivateSubnet.Id(),
+				SubnetId: stack.Subnets.Public.Id(),
 			},
 		},
 		SecurityGroups: &[]*string{stack.PublicAppLoadBalancer.SecGroup.Id()},

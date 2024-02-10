@@ -18,7 +18,7 @@ func NewNatGateway(stack *stack.MyStack) {
 
 	natGatewayName := fmt.Sprintf("%v-nat-g", stack.Cfgs.AppName)
 	stack.NatGateway = natgateway.NewNatGateway(stack.TfStack, jsii.String(natGatewayName), &natgateway.NatGatewayConfig{
-		SubnetId:         stack.PrivateSubnet.Id(),
+		SubnetId:         stack.Subnets.PrivateA.Id(),
 		ConnectivityType: jsii.String("public"),
 		AllocationId:     eip.Id(),
 	})

@@ -35,12 +35,12 @@ func NewRouteTables(stack *stack.MyStack) {
 	privateRouteTableAssociationName := fmt.Sprintf("%v-private-rt-a", stack.Cfgs.AppName)
 	routetableassociation.NewRouteTableAssociation(stack.TfStack, jsii.String(privateRouteTableAssociationName), &routetableassociation.RouteTableAssociationConfig{
 		RouteTableId: stack.PrivateRouteTable.Id(),
-		SubnetId:     stack.PrivateSubnet.Id(),
+		SubnetId:     stack.Subnets.PrivateA.Id(),
 	})
 
 	publicRouteTableAssociationName := fmt.Sprintf("%v-public-rt-a", stack.Cfgs.AppName)
 	routetableassociation.NewRouteTableAssociation(stack.TfStack, jsii.String(publicRouteTableAssociationName), &routetableassociation.RouteTableAssociationConfig{
 		RouteTableId: stack.PublicRouteTable.Id(),
-		SubnetId:     stack.PublicSubnet.Id(),
+		SubnetId:     stack.Subnets.Public.Id(),
 	})
 }

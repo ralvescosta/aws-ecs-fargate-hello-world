@@ -23,6 +23,12 @@ type (
 		Alb         alb.Alb
 	}
 
+	Subnet struct {
+		PrivateA subnet.Subnet
+		PrivateB subnet.Subnet
+		Public   subnet.Subnet
+	}
+
 	MyStack struct {
 		Cfgs   *configs.Configs
 		Logger *zap.SugaredLogger
@@ -30,8 +36,7 @@ type (
 		TfStack cdktf.TerraformStack
 
 		Vpc                    vpc.Vpc
-		PrivateSubnet          subnet.Subnet
-		PublicSubnet           subnet.Subnet
+		Subnets                *Subnet
 		InternetGateway        internetgateway.InternetGateway
 		NatGateway             natgateway.NatGateway
 		PrivateRouteTable      routetable.RouteTable
