@@ -16,23 +16,47 @@ import (
 	"go.uber.org/zap"
 )
 
-type MyStack struct {
-	Cfgs   *configs.Configs
-	Logger *zap.SugaredLogger
+type (
+	ApplicationLoadBalancer struct {
+		SecGroup    securitygroup.SecurityGroup
+		TargetGroup albtargetgroup.AlbTargetGroup
+		Alb         alb.Alb
+	}
 
-	TfStack cdktf.TerraformStack
+	Subnet struct {
+		PrivateA subnet.Subnet
+		PrivateB subnet.Subnet
+		PublicA  subnet.Subnet
+		PublicB  subnet.Subnet
+	}
 
-	Vpc                            vpc.Vpc
-	PrivateSubnet                  subnet.Subnet
-	PublicSubnet                   subnet.Subnet
-	InternetGateway                internetgateway.InternetGateway
-	NatGateway                     natgateway.NatGateway
-	PrivateRouteTable              routetable.RouteTable
-	PublicRouteTable               routetable.RouteTable
-	ElasticLoadBalancerSecGroup    securitygroup.SecurityGroup
-	ElasticLoadBalancerTargetGroup albtargetgroup.AlbTargetGroup
-	ElasticLoadBalancer            alb.Alb
-	EcsCluster                     ecscluster.EcsCluster
-	EcrAPIRepository               ecrrepository.EcrRepository
-	EcrGrpcRepository              ecrrepository.EcrRepository
-}
+	RouteTable struct {
+		PrivateA routetable.RouteTable
+		PrivateB routetable.RouteTable
+		PublicA  routetable.RouteTable
+		PublicB  routetable.RouteTable
+	}
+
+	NatGateway struct {
+		PrivateA natgateway.NatGateway
+		PrivateB natgateway.NatGateway
+	}
+
+	MyStack struct {
+		Cfgs   *configs.Configs
+		Logger *zap.SugaredLogger
+
+		TfStack cdktf.TerraformStack
+
+		Vpc                    vpc.Vpc
+		Subnets                *Subnet
+		InternetGateway        internetgateway.InternetGateway
+		NatGateways            *NatGateway
+		RouteTables            *RouteTable
+		PublicAppLoadBalancer  *ApplicationLoadBalancer
+		PrivateAppLoadBalancer *ApplicationLoadBalancer
+		EcsCluster             ecscluster.EcsCluster
+		EcrAPIRepository       ecrrepository.EcrRepository
+		EcrGrpcRepository      ecrrepository.EcrRepository
+	}
+)

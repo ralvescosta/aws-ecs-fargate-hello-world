@@ -9,17 +9,31 @@ import (
 )
 
 func NewSubnets(stack *stack.MyStack) {
-	privateSubNetName := fmt.Sprintf("%v-private-sbnt", stack.Cfgs.AppName)
-	stack.PrivateSubnet = subnet.NewSubnet(stack.TfStack, jsii.Sprintf(privateSubNetName), &subnet.SubnetConfig{
+	privateSubNetAName := fmt.Sprintf("%v-private-sbnt-a", stack.Cfgs.AppName)
+	stack.Subnets.PrivateA = subnet.NewSubnet(stack.TfStack, jsii.Sprintf(privateSubNetAName), &subnet.SubnetConfig{
 		VpcId:            stack.Vpc.Id(),
-		CidrBlock:        jsii.String(stack.Cfgs.PrivateSubnetCIDR),
-		AvailabilityZone: jsii.String(stack.Cfgs.PrivateSubnetAZ),
+		CidrBlock:        jsii.String(stack.Cfgs.PrivateSubnetA_CIDR),
+		AvailabilityZone: jsii.String(stack.Cfgs.PrivateSubnetA_AZ),
 	})
 
-	publicSubNetName := fmt.Sprintf("%v-public-sbnt", stack.Cfgs.AppName)
-	stack.PublicSubnet = subnet.NewSubnet(stack.TfStack, jsii.Sprintf(publicSubNetName), &subnet.SubnetConfig{
+	privateSubNetBName := fmt.Sprintf("%v-private-sbnt-b", stack.Cfgs.AppName)
+	stack.Subnets.PrivateB = subnet.NewSubnet(stack.TfStack, jsii.Sprintf(privateSubNetBName), &subnet.SubnetConfig{
 		VpcId:            stack.Vpc.Id(),
-		CidrBlock:        jsii.Sprintf(stack.Cfgs.PublicSubnetCIDR),
-		AvailabilityZone: jsii.String(stack.Cfgs.PublicSubnetAZ),
+		CidrBlock:        jsii.String(stack.Cfgs.PrivateSubnetB_CIDR),
+		AvailabilityZone: jsii.String(stack.Cfgs.PrivateSubnetB_AZ),
+	})
+
+	publicSubNetAName := fmt.Sprintf("%v-public-sbnt-a", stack.Cfgs.AppName)
+	stack.Subnets.PublicA = subnet.NewSubnet(stack.TfStack, jsii.Sprintf(publicSubNetAName), &subnet.SubnetConfig{
+		VpcId:            stack.Vpc.Id(),
+		CidrBlock:        jsii.Sprintf(stack.Cfgs.PublicSubnetA_CIDR),
+		AvailabilityZone: jsii.String(stack.Cfgs.PublicSubnetA_AZ),
+	})
+
+	publicSubNetBName := fmt.Sprintf("%v-public-sbnt-b", stack.Cfgs.AppName)
+	stack.Subnets.PublicB = subnet.NewSubnet(stack.TfStack, jsii.Sprintf(publicSubNetBName), &subnet.SubnetConfig{
+		VpcId:            stack.Vpc.Id(),
+		CidrBlock:        jsii.Sprintf(stack.Cfgs.PublicSubnetB_CIDR),
+		AvailabilityZone: jsii.String(stack.Cfgs.PublicSubnetB_AZ),
 	})
 }
