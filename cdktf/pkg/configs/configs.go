@@ -19,11 +19,15 @@ type Configs struct {
 
 	VpcCIDR string
 
-	PrivateSubnetCIDR string
-	PrivateSubnetAZ   string
+	PrivateSubnetA_CIDR string
+	PrivateSubnetA_AZ   string
+	PrivateSubnetB_CIDR string
+	PrivateSubnetB_AZ   string
 
-	PublicSubnetCIDR string
-	PublicSubnetAZ   string
+	PublicSubnetA_CIDR string
+	PublicSubnetA_AZ   string
+	PublicSubnetB_CIDR string
+	PublicSubnetB_AZ   string
 }
 
 func NewConfigs() (*Configs, *zap.SugaredLogger) {
@@ -44,11 +48,15 @@ func NewConfigs() (*Configs, *zap.SugaredLogger) {
 		TerraformCloudHostname:     requiredEnv(logger, "TERRAFORM_CLOUD_HOSTNAME"),
 		TerraformCloudOrganization: requiredEnv(logger, "TERRAFORM_CLOUD_ORGANIZATION"),
 
-		VpcCIDR:           requiredEnv(logger, "VPC_CIDR"),
-		PrivateSubnetCIDR: requiredEnv(logger, "PRIVATE_SUBNET_CIDR"),
-		PrivateSubnetAZ:   requiredEnv(logger, "PRIVATE_SUBNET_AZ"),
-		PublicSubnetCIDR:  requiredEnv(logger, "PUBLIC_SUBNET_CIDR"),
-		PublicSubnetAZ:    requiredEnv(logger, "PUBLIC_SUBNET_AZ"),
+		VpcCIDR:             requiredEnv(logger, "VPC_CIDR"),
+		PrivateSubnetA_CIDR: requiredEnv(logger, "PRIVATE_SUBNET_A_CIDR"),
+		PrivateSubnetA_AZ:   requiredEnv(logger, "PRIVATE_SUBNET_A_AZ"),
+		PrivateSubnetB_CIDR: requiredEnv(logger, "PRIVATE_SUBNET_B_CIDR"),
+		PrivateSubnetB_AZ:   requiredEnv(logger, "PRIVATE_SUBNET_B_AZ"),
+		PublicSubnetA_CIDR:  requiredEnv(logger, "PUBLIC_SUBNET_A_CIDR"),
+		PublicSubnetA_AZ:    requiredEnv(logger, "PUBLIC_SUBNET_A_AZ"),
+		PublicSubnetB_CIDR:  requiredEnv(logger, "PUBLIC_SUBNET_B_CIDR"),
+		PublicSubnetB_AZ:    requiredEnv(logger, "PUBLIC_SUBNET_B_AZ"),
 	}, logger
 }
 

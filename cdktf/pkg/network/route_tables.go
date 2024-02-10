@@ -10,19 +10,30 @@ import (
 )
 
 func NewRouteTables(stack *stack.MyStack) {
-	privateRouteTableName := fmt.Sprintf("%v-private-rt", stack.Cfgs.AppName)
-	stack.PrivateRouteTable = routetable.NewRouteTable(stack.TfStack, jsii.String(privateRouteTableName), &routetable.RouteTableConfig{
+	privateRouteTableAName := fmt.Sprintf("%v-private-rt-a", stack.Cfgs.AppName)
+	stack.RouteTables.PrivateA = routetable.NewRouteTable(stack.TfStack, jsii.String(privateRouteTableAName), &routetable.RouteTableConfig{
 		VpcId: stack.Vpc.Id(),
 		Route: []*routetable.RouteTableRoute{
 			{
 				CidrBlock: jsii.String("0.0.0.0/0"),
-				GatewayId: stack.NatGateway.Id(),
+				GatewayId: stack.NatGateways.PrivateA.Id(),
 			},
 		},
 	})
 
-	publicRouteTableName := fmt.Sprintf("%v-public-rt", stack.Cfgs.AppName)
-	stack.PublicRouteTable = routetable.NewRouteTable(stack.TfStack, jsii.String(publicRouteTableName), &routetable.RouteTableConfig{
+	privateRouteTableBName := fmt.Sprintf("%v-private-rt-b", stack.Cfgs.AppName)
+	stack.RouteTables.PrivateB = routetable.NewRouteTable(stack.TfStack, jsii.String(privateRouteTableBName), &routetable.RouteTableConfig{
+		VpcId: stack.Vpc.Id(),
+		Route: []*routetable.RouteTableRoute{
+			{
+				CidrBlock: jsii.String("0.0.0.0/0"),
+				GatewayId: stack.NatGateways.PrivateB.Id(),
+			},
+		},
+	})
+
+	publicRouteTableAName := fmt.Sprintf("%v-public-rt-a", stack.Cfgs.AppName)
+	stack.RouteTables.PublicA = routetable.NewRouteTable(stack.TfStack, jsii.String(publicRouteTableAName), &routetable.RouteTableConfig{
 		VpcId: stack.Vpc.Id(),
 		Route: []*routetable.RouteTableRoute{
 			{
@@ -32,15 +43,38 @@ func NewRouteTables(stack *stack.MyStack) {
 		},
 	})
 
-	privateRouteTableAssociationName := fmt.Sprintf("%v-private-rt-a", stack.Cfgs.AppName)
-	routetableassociation.NewRouteTableAssociation(stack.TfStack, jsii.String(privateRouteTableAssociationName), &routetableassociation.RouteTableAssociationConfig{
-		RouteTableId: stack.PrivateRouteTable.Id(),
+	publicRouteTableBName := fmt.Sprintf("%v-public-rt-b", stack.Cfgs.AppName)
+	stack.RouteTables.PublicB = routetable.NewRouteTable(stack.TfStack, jsii.String(publicRouteTableBName), &routetable.RouteTableConfig{
+		VpcId: stack.Vpc.Id(),
+		Route: []*routetable.RouteTableRoute{
+			{
+				CidrBlock: jsii.String("0.0.0.0/0"),
+				GatewayId: stack.InternetGateway.Id(),
+			},
+		},
+	})
+
+	privateRouteTableAssociationAName := fmt.Sprintf("%v-private-a-rta", stack.Cfgs.AppName)
+	routetableassociation.NewRouteTableAssociation(stack.TfStack, jsii.String(privateRouteTableAssociationAName), &routetableassociation.RouteTableAssociationConfig{
+		RouteTableId: stack.RouteTables.PrivateA.Id(),
 		SubnetId:     stack.Subnets.PrivateA.Id(),
 	})
 
-	publicRouteTableAssociationName := fmt.Sprintf("%v-public-rt-a", stack.Cfgs.AppName)
-	routetableassociation.NewRouteTableAssociation(stack.TfStack, jsii.String(publicRouteTableAssociationName), &routetableassociation.RouteTableAssociationConfig{
-		RouteTableId: stack.PublicRouteTable.Id(),
-		SubnetId:     stack.Subnets.Public.Id(),
+	privateRouteTableAssociationBName := fmt.Sprintf("%v-private-b-rta", stack.Cfgs.AppName)
+	routetableassociation.NewRouteTableAssociation(stack.TfStack, jsii.String(privateRouteTableAssociationBName), &routetableassociation.RouteTableAssociationConfig{
+		RouteTableId: stack.RouteTables.PrivateB.Id(),
+		SubnetId:     stack.Subnets.PrivateB.Id(),
+	})
+
+	publicRouteTableAssociationAName := fmt.Sprintf("%v-public-a-rta", stack.Cfgs.AppName)
+	routetableassociation.NewRouteTableAssociation(stack.TfStack, jsii.String(publicRouteTableAssociationAName), &routetableassociation.RouteTableAssociationConfig{
+		RouteTableId: stack.RouteTables.PublicA.Id(),
+		SubnetId:     stack.Subnets.PublicA.Id(),
+	})
+
+	publicRouteTableAssociationBName := fmt.Sprintf("%v-public-b-rta", stack.Cfgs.AppName)
+	routetableassociation.NewRouteTableAssociation(stack.TfStack, jsii.String(publicRouteTableAssociationBName), &routetableassociation.RouteTableAssociationConfig{
+		RouteTableId: stack.RouteTables.PublicB.Id(),
+		SubnetId:     stack.Subnets.PublicB.Id(),
 	})
 }

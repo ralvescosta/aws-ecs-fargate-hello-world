@@ -26,7 +26,20 @@ type (
 	Subnet struct {
 		PrivateA subnet.Subnet
 		PrivateB subnet.Subnet
-		Public   subnet.Subnet
+		PublicA  subnet.Subnet
+		PublicB  subnet.Subnet
+	}
+
+	RouteTable struct {
+		PrivateA routetable.RouteTable
+		PrivateB routetable.RouteTable
+		PublicA  routetable.RouteTable
+		PublicB  routetable.RouteTable
+	}
+
+	NatGateway struct {
+		PrivateA natgateway.NatGateway
+		PrivateB natgateway.NatGateway
 	}
 
 	MyStack struct {
@@ -38,9 +51,8 @@ type (
 		Vpc                    vpc.Vpc
 		Subnets                *Subnet
 		InternetGateway        internetgateway.InternetGateway
-		NatGateway             natgateway.NatGateway
-		PrivateRouteTable      routetable.RouteTable
-		PublicRouteTable       routetable.RouteTable
+		NatGateways            *NatGateway
+		RouteTables            *RouteTable
 		PublicAppLoadBalancer  *ApplicationLoadBalancer
 		PrivateAppLoadBalancer *ApplicationLoadBalancer
 		EcsCluster             ecscluster.EcsCluster

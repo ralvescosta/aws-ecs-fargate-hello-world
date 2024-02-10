@@ -10,17 +10,30 @@ import (
 )
 
 func NewNatGateway(stack *stack.MyStack) {
-	eipName := fmt.Sprintf("%v-nat-g-eip", stack.Cfgs.AppName)
-	eip := eip.NewEip(stack.TfStack, jsii.String(eipName), &eip.EipConfig{
+	eipAName := fmt.Sprintf("%v-nat-g-eip-a", stack.Cfgs.AppName)
+	eipA := eip.NewEip(stack.TfStack, jsii.String(eipAName), &eip.EipConfig{
 		Domain: jsii.String("vpc"),
 		// Instance: stack.NatGateway.Id(),
 	})
 
-	natGatewayName := fmt.Sprintf("%v-nat-g", stack.Cfgs.AppName)
-	stack.NatGateway = natgateway.NewNatGateway(stack.TfStack, jsii.String(natGatewayName), &natgateway.NatGatewayConfig{
-		SubnetId:         stack.Subnets.PrivateA.Id(),
+	natGatewayAName := fmt.Sprintf("%v-nat-g-a", stack.Cfgs.AppName)
+	stack.NatGateways.PrivateA = natgateway.NewNatGateway(stack.TfStack, jsii.String(natGatewayAName), &natgateway.NatGatewayConfig{
+		SubnetId:         stack.Subnets.PublicA.Id(),
 		ConnectivityType: jsii.String("public"),
-		AllocationId:     eip.Id(),
+		AllocationId:     eipA.Id(),
+	})
+
+	eipBName := fmt.Sprintf("%v-nat-g-eip-b", stack.Cfgs.AppName)
+	eipB := eip.NewEip(stack.TfStack, jsii.String(eipBName), &eip.EipConfig{
+		Domain: jsii.String("vpc"),
+		// Instance: stack.NatGateway.Id(),
+	})
+
+	natGatewayBName := fmt.Sprintf("%v-nat-g-b", stack.Cfgs.AppName)
+	stack.NatGateways.PrivateB = natgateway.NewNatGateway(stack.TfStack, jsii.String(natGatewayBName), &natgateway.NatGatewayConfig{
+		SubnetId:         stack.Subnets.PublicB.Id(),
+		ConnectivityType: jsii.String("public"),
+		AllocationId:     eipB.Id(),
 	})
 
 	return

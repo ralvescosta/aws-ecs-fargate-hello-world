@@ -51,7 +51,7 @@ func NewPublicApplicationLoadBalancer(stack *stack.MyStack) {
 				SubnetId: stack.Subnets.PrivateA.Id(),
 			},
 			{
-				SubnetId: stack.Subnets.Public.Id(),
+				SubnetId: stack.Subnets.PrivateB.Id(),
 			},
 		},
 		SecurityGroups: &[]*string{stack.PublicAppLoadBalancer.SecGroup.Id()},

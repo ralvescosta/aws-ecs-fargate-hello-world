@@ -61,7 +61,8 @@ func NewNginxContainer(stack *stack.MyStack) {
 			Type: jsii.String("ECS"),
 		},
 		NetworkConfiguration: &ecsservice.EcsServiceNetworkConfiguration{
-			Subnets:        &[]*string{stack.Subnets.PrivateA.Id()},
+			AssignPublicIp: jsii.Bool(true),
+			Subnets:        &[]*string{stack.Subnets.PrivateA.Id(), stack.Subnets.PrivateB.Id()},
 			SecurityGroups: &[]*string{secGroup.Id()},
 		},
 		LoadBalancer: &[]*ecsservice.EcsServiceLoadBalancer{

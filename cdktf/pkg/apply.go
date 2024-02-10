@@ -16,6 +16,9 @@ func ApplyStack(logger *zap.SugaredLogger, cfgs *configs.Configs, tfStack cdktf.
 		Cfgs:                   cfgs,
 		Logger:                 logger,
 		TfStack:                tfStack,
+		Subnets:                &stack.Subnet{},
+		NatGateways:            &stack.NatGateway{},
+		RouteTables:            &stack.RouteTable{},
 		PublicAppLoadBalancer:  &stack.ApplicationLoadBalancer{},
 		PrivateAppLoadBalancer: &stack.ApplicationLoadBalancer{},
 	}
