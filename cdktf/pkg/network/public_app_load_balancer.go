@@ -48,10 +48,10 @@ func NewPublicApplicationLoadBalancer(stack *stack.MyStack) {
 		IpAddressType:    jsii.String("ipv4"),
 		SubnetMapping: []*alb.AlbSubnetMapping{
 			{
-				SubnetId: stack.Subnets.PrivateA.Id(),
+				SubnetId: stack.Subnets.PublicA.Id(),
 			},
 			{
-				SubnetId: stack.Subnets.PrivateB.Id(),
+				SubnetId: stack.Subnets.PublicB.Id(),
 			},
 		},
 		SecurityGroups: &[]*string{stack.PublicAppLoadBalancer.SecGroup.Id()},
@@ -79,7 +79,7 @@ func NewPublicApplicationLoadBalancer(stack *stack.MyStack) {
 		DefaultAction: []*alblistener.AlbListenerDefaultAction{
 			{
 				Type:           jsii.String("forward"),
-				TargetGroupArn: stack.PublicAppLoadBalancer.SecGroup.Arn(),
+				TargetGroupArn: stack.PublicAppLoadBalancer.TargetGroup.Arn(),
 			},
 		},
 	})
