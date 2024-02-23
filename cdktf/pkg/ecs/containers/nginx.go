@@ -14,16 +14,28 @@ func NewNginxContainer(stack *stack.MyStack) {
 	ecsNginxTaskDefinitionName := fmt.Sprintf("%v-ecs-nginx-td", stack.Cfgs.AppName)
 	td := ecstaskdefinition.NewEcsTaskDefinition(stack.TfStack, jsii.String(ecsNginxTaskDefinitionName), &ecstaskdefinition.EcsTaskDefinitionConfig{
 		Family:                  jsii.String("service"),
-		Cpu:                     jsii.String("10"),
-		Memory:                  jsii.String("128"),
+		Cpu:                     jsii.String("256"),
+		Memory:                  jsii.String("512"),
 		NetworkMode:             jsii.String("awsvpc"),
 		RequiresCompatibilities: jsii.Strings("FARGATE"),
 		ContainerDefinitions: jsii.String(`
 		[
 			{
+				"cpu": 256,
 				"image": "nginx",
 				"name": "fna-nginx",
-				"portMappings": [{ "containerPort": 80 }]
+				"portMappings": [{ "containerPort": 80 }],
+				"logConfiguration": {
+        	"logDriver": "awslogs",
+          "options": {
+          	"awslogs-create-group": "true",
+            "awslogs-group": "awslogs-nginx",
+            "awslogs-region": "us-west-1",
+            "awslogs-stream-prefix": "awslogs",
+            "mode": "non-blocking", 
+            "max-buffer-size": "25m" 
+          }
+        }
 			}
 		]
 		`),
@@ -67,8 +79,7 @@ func NewNginxContainer(stack *stack.MyStack) {
 		},
 		LoadBalancer: &[]*ecsservice.EcsServiceLoadBalancer{
 			{
-				ElbName:        stack.PublicAppLoadBalancer.Alb.Name(),
-				TargetGroupArn: stack.PublicAppLoadBalancer.SecGroup.Arn(),
+				TargetGroupArn: stack.PublicAppLoadBalancer.TargetGroup.Arn(),
 				ContainerName:  jsii.String("fna-nginx"),
 				ContainerPort:  jsii.Number(80),
 			},
