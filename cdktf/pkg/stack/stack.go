@@ -5,6 +5,7 @@ import (
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/albtargetgroup"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/ecrrepository"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/ecscluster"
+	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/eip"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/internetgateway"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/natgateway"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/routetable"
@@ -38,7 +39,9 @@ type (
 	}
 
 	NatGateway struct {
+		EIpA     eip.Eip
 		PrivateA natgateway.NatGateway
+		EIpB     eip.Eip
 		PrivateB natgateway.NatGateway
 	}
 
