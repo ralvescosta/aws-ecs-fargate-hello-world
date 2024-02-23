@@ -24,18 +24,7 @@ func NewNginxContainer(stack *stack.MyStack) {
 				"cpu": 256,
 				"image": "nginx",
 				"name": "fna-nginx",
-				"portMappings": [{ "containerPort": 80 }],
-				"logConfiguration": {
-        	"logDriver": "awslogs",
-          "options": {
-          	"awslogs-create-group": "true",
-            "awslogs-group": "awslogs-nginx",
-            "awslogs-region": "us-west-1",
-            "awslogs-stream-prefix": "awslogs",
-            "mode": "non-blocking", 
-            "max-buffer-size": "25m" 
-          }
-        }
+				"portMappings": [{ "containerPort": 80 }]
 			}
 		]
 		`),
