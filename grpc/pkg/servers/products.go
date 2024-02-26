@@ -24,6 +24,8 @@ func NewProductServer(logger logging.Logger, service services.ProductsService) p
 }
 
 func (s *productsServer) Create(ctx context.Context, req *protos.CreateProductRequest) (*protos.CreateProductResponse, error) {
+	s.logger.Debug("received Create rpc")
+
 	res, err := s.service.Create(ctx, req)
 	if err != nil {
 		appErr := err.(errors.ApplicationError)
@@ -34,6 +36,8 @@ func (s *productsServer) Create(ctx context.Context, req *protos.CreateProductRe
 }
 
 func (s *productsServer) ListProducts(ctx context.Context, req *protos.ListProductsRequest) (*protos.ListProductsResponse, error) {
+	s.logger.Debug("received ListProducts rpc")
+
 	res, err := s.service.ListProducts(ctx, req)
 	if err != nil {
 		appErr := err.(errors.ApplicationError)
