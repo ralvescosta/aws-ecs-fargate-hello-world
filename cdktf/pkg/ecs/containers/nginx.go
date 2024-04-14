@@ -74,5 +74,16 @@ func NewNginxContainer(stack *stack.MyStack) {
 			},
 		},
 		HealthCheckGracePeriodSeconds: jsii.Number(60),
+		ServiceConnectConfiguration: &ecsservice.EcsServiceServiceConnectConfiguration{
+			Enabled:   true,
+			Namespace: jsii.String("aws_service_discovery_http_namespace"),
+			Service: &ecsservice.EcsServiceServiceConnectConfigurationService{
+				DiscoveryName: jsii.String("nginx"),
+				PortName:      jsii.String("i-have-no-ideia"),
+				ClientAlias: &ecsservice.EcsServiceServiceConnectConfigurationServiceClientAlias{
+					Port: jsii.Number(80),
+				},
+			},
+		},
 	})
 }
