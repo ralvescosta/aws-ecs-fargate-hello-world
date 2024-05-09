@@ -6,6 +6,9 @@ import (
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/ecrrepository"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/ecscluster"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/eip"
+	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/iampolicy"
+	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/iamrole"
+	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/iamrolepolicyattachment"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/internetgateway"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/natgateway"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/routetable"
@@ -45,6 +48,15 @@ type (
 		PrivateB natgateway.NatGateway
 	}
 
+	IAMCloudWatch struct {
+		Role          iamrole.IamRole
+		Policy        iampolicy.IamPolicy
+		RolePolicyAtt iamrolepolicyattachment.IamRolePolicyAttachment
+	}
+
+	CloudWatchLogs struct {
+	}
+
 	MyStack struct {
 		Cfgs   *configs.Configs
 		Logger *zap.SugaredLogger
@@ -58,6 +70,7 @@ type (
 		RouteTables            *RouteTable
 		PublicAppLoadBalancer  *ApplicationLoadBalancer
 		PrivateAppLoadBalancer *ApplicationLoadBalancer
+		IAMCloudWatch          *IAMCloudWatch
 		EcsCluster             ecscluster.EcsCluster
 		EcrAPIRepository       ecrrepository.EcrRepository
 		EcrGrpcRepository      ecrrepository.EcrRepository

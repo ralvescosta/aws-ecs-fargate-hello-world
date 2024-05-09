@@ -14,6 +14,7 @@ type Configs struct {
 	LogLevel string
 
 	Region                     string
+	AccountID                  string
 	TerraformCloudHostname     string
 	TerraformCloudOrganization string
 

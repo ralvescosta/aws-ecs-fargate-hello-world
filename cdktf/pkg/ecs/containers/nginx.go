@@ -2,8 +2,10 @@ package containers
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/aws/jsii-runtime-go"
+	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/cloudwatchloggroup"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/ecsservice"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/ecstaskdefinition"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/securitygroup"
@@ -11,6 +13,32 @@ import (
 )
 
 func NewNginxContainer(stack *stack.MyStack) {
+	logGroupName := fmt.Sprintf("ecs/%v-nginx", stack.Cfgs.AppName)
+	cloudwatchloggroup.NewCloudwatchLogGroup(stack.TfStack, jsii.String(fmt.Sprintf("%v-log-group", logGroupName)), &cloudwatchloggroup.CloudwatchLogGroupConfig{
+		Name:            jsii.String(logGroupName),
+		RetentionInDays: jsii.Number(14),
+	})
+
+	containerDefinitions := `
+	[
+		{
+			"cpu": 256,
+			"image": "nginx",
+			"name": "fna-nginx",
+			"portMappings": [{ "containerPort": 80 }],
+			"logConfiguration": {
+				"logDriver": "awslogs",
+				"options": {
+					"awslogs-group": "<<GROUP_NAME>>",
+					"awslogs-region": "<<AWS_REGION>>",
+					"awslogs-stream-prefix": "ecs"
+				}
+			}
+		}
+	]`
+	containerDefinitions = strings.Replace(containerDefinitions, "<<GROUP_NAME>>", logGroupName, -1)
+	containerDefinitions = strings.Replace(containerDefinitions, "<<AWS_REGION>>", stack.Cfgs.Region, -1)
+
 	ecsNginxTaskDefinitionName := fmt.Sprintf("%v-ecs-nginx-td", stack.Cfgs.AppName)
 	td := ecstaskdefinition.NewEcsTaskDefinition(stack.TfStack, jsii.String(ecsNginxTaskDefinitionName), &ecstaskdefinition.EcsTaskDefinitionConfig{
 		Family:                  jsii.String("service"),
@@ -18,16 +46,8 @@ func NewNginxContainer(stack *stack.MyStack) {
 		Memory:                  jsii.String("512"),
 		NetworkMode:             jsii.String("awsvpc"),
 		RequiresCompatibilities: jsii.Strings("FARGATE"),
-		ContainerDefinitions: jsii.String(`
-		[
-			{
-				"cpu": 256,
-				"image": "nginx",
-				"name": "fna-nginx",
-				"portMappings": [{ "containerPort": 80 }]
-			}
-		]
-		`),
+		ExecutionRoleArn:        stack.IAMCloudWatch.Role.Arn(),
+		ContainerDefinitions:    jsii.String(containerDefinitions),
 	})
 
 	ecsTaskDefinitionSecGroupName := fmt.Sprintf("%v-ecs-nginx-sec-group", stack.Cfgs.AppName)
@@ -74,16 +94,16 @@ func NewNginxContainer(stack *stack.MyStack) {
 			},
 		},
 		HealthCheckGracePeriodSeconds: jsii.Number(60),
-		ServiceConnectConfiguration: &ecsservice.EcsServiceServiceConnectConfiguration{
-			Enabled:   true,
-			Namespace: jsii.String("aws_service_discovery_http_namespace"),
-			Service: &ecsservice.EcsServiceServiceConnectConfigurationService{
-				DiscoveryName: jsii.String("nginx"),
-				PortName:      jsii.String("i-have-no-ideia"),
-				ClientAlias: &ecsservice.EcsServiceServiceConnectConfigurationServiceClientAlias{
-					Port: jsii.Number(80),
-				},
-			},
-		},
+		// ServiceConnectConfiguration: &ecsservice.EcsServiceServiceConnectConfiguration{
+		// 	Enabled:   true,
+		// 	Namespace: jsii.String("aws_service_discovery_http_namespace"),
+		// 	Service: &ecsservice.EcsServiceServiceConnectConfigurationService{
+		// 		DiscoveryName: jsii.String("nginx"),
+		// 		PortName:      jsii.String("i-have-no-ideia"),
+		// 		ClientAlias: &ecsservice.EcsServiceServiceConnectConfigurationServiceClientAlias{
+		// 			Port: jsii.Number(80),
+		// 		},
+		// 	},
+		// },
 	})
 }
