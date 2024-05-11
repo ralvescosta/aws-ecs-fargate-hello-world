@@ -9,6 +9,10 @@ import (
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/stack"
 )
 
+// This function will create two nat gateways
+//
+// The NAT Gateway will be responsible to configure the internet Egress for the private subnets
+// it mens that, the private subnet will be able to have outbound traffic to internet
 func NewNatGateway(stack *stack.MyStack) {
 	eipAName := fmt.Sprintf("%v-nat-g-eip-a", stack.Cfgs.AppName)
 	stack.NatGateways.EIpA = eip.NewEip(stack.TfStack, jsii.String(eipAName), &eip.EipConfig{

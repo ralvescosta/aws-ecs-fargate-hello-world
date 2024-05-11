@@ -26,8 +26,7 @@ func NewIAMCloudWatch(stack *stack.MyStack) {
 			}`),
 	})
 
-	policy := `
-	{
+	policy := `{
 		"Version": "2012-10-17",
 		"Statement": [
 			{

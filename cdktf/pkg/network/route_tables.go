@@ -9,6 +9,9 @@ import (
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/stack"
 )
 
+// This method will create the route tables for each subnet and associate the route tables with than
+//
+// The route table bound the internet gateway to the public subnets and the nat gateway to the private subnets
 func NewRouteTables(stack *stack.MyStack) {
 	privateRouteTableAName := fmt.Sprintf("%v-private-rt-a", stack.Cfgs.AppName)
 	stack.RouteTables.PrivateA = routetable.NewRouteTable(stack.TfStack, jsii.String(privateRouteTableAName), &routetable.RouteTableConfig{

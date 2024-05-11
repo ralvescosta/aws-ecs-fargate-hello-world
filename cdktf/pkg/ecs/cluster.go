@@ -8,6 +8,7 @@ import (
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/stack"
 )
 
+// The method will create ECS cluster
 func NewECSFargateCluster(stack *stack.MyStack) {
 	ecsClusterName := fmt.Sprintf("%v-ecs-cluster", stack.Cfgs.AppName)
 

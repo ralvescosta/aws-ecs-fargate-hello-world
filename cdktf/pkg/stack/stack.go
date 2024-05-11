@@ -13,6 +13,7 @@ import (
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/natgateway"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/routetable"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/securitygroup"
+	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/servicediscoveryprivatednsnamespace"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/subnet"
 	"github.com/cdktf/cdktf-provider-aws-go/aws/v18/vpc"
 	"github.com/hashicorp/terraform-cdk-go/cdktf"
@@ -63,16 +64,17 @@ type (
 
 		TfStack cdktf.TerraformStack
 
-		Vpc                    vpc.Vpc
-		Subnets                *Subnet
-		InternetGateway        internetgateway.InternetGateway
-		NatGateways            *NatGateway
-		RouteTables            *RouteTable
-		PublicAppLoadBalancer  *ApplicationLoadBalancer
-		PrivateAppLoadBalancer *ApplicationLoadBalancer
-		IAMCloudWatch          *IAMCloudWatch
-		EcsCluster             ecscluster.EcsCluster
-		EcrAPIRepository       ecrrepository.EcrRepository
-		EcrGrpcRepository      ecrrepository.EcrRepository
+		Vpc                              vpc.Vpc
+		Subnets                          *Subnet
+		InternetGateway                  internetgateway.InternetGateway
+		NatGateways                      *NatGateway
+		RouteTables                      *RouteTable
+		PublicAppLoadBalancer            *ApplicationLoadBalancer
+		PrivateAppLoadBalancer           *ApplicationLoadBalancer
+		IAMCloudWatch                    *IAMCloudWatch
+		ServiceDiscoveryPrivateNamespace servicediscoveryprivatednsnamespace.ServiceDiscoveryPrivateDnsNamespace
+		EcsCluster                       ecscluster.EcsCluster
+		EcrAPIRepository                 ecrrepository.EcrRepository
+		EcrGrpcRepository                ecrrepository.EcrRepository
 	}
 )

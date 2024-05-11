@@ -11,6 +11,10 @@ import (
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/stack"
 )
 
+// This method will create the public application load balancer
+//
+// The application load balancer will be exposed in the internet and will be responsible to delivery
+// all the request to the HTTP services that are deployed in the private subnet
 func NewPublicApplicationLoadBalancer(stack *stack.MyStack) {
 	secGroupName := fmt.Sprintf("%v-alb-sec-group", stack.Cfgs.AppName)
 	stack.PublicAppLoadBalancer.SecGroup = securitygroup.NewSecurityGroup(stack.TfStack, jsii.String(secGroupName), &securitygroup.SecurityGroupConfig{

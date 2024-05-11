@@ -12,6 +12,7 @@ import (
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/stack"
 )
 
+// This method will create the ECS task definition and the ECS service
 func NewNginxContainer(stack *stack.MyStack) {
 	logGroupName := fmt.Sprintf("ecs/%v-nginx", stack.Cfgs.AppName)
 	cloudwatchloggroup.NewCloudwatchLogGroup(stack.TfStack, jsii.String(fmt.Sprintf("%v-log-group", logGroupName)), &cloudwatchloggroup.CloudwatchLogGroupConfig{
@@ -19,12 +20,14 @@ func NewNginxContainer(stack *stack.MyStack) {
 		RetentionInDays: jsii.Number(14),
 	})
 
+	containerName := fmt.Sprintf("%v-fna-nginx", stack.Cfgs.AppName)
+
 	containerDefinitions := `
 	[
 		{
 			"cpu": 256,
 			"image": "nginx",
-			"name": "fna-nginx",
+			"name": "<<CONTAINER_NAME>>",
 			"portMappings": [{ "containerPort": 80 }],
 			"logConfiguration": {
 				"logDriver": "awslogs",
@@ -36,18 +39,23 @@ func NewNginxContainer(stack *stack.MyStack) {
 			}
 		}
 	]`
+	containerDefinitions = strings.Replace(containerDefinitions, "<<CONTAINER_NAME>>", containerName, -1)
 	containerDefinitions = strings.Replace(containerDefinitions, "<<GROUP_NAME>>", logGroupName, -1)
 	containerDefinitions = strings.Replace(containerDefinitions, "<<AWS_REGION>>", stack.Cfgs.Region, -1)
 
 	ecsNginxTaskDefinitionName := fmt.Sprintf("%v-ecs-nginx-td", stack.Cfgs.AppName)
 	td := ecstaskdefinition.NewEcsTaskDefinition(stack.TfStack, jsii.String(ecsNginxTaskDefinitionName), &ecstaskdefinition.EcsTaskDefinitionConfig{
-		Family:                  jsii.String("service"),
+		Family:                  jsii.String(ecsNginxTaskDefinitionName),
 		Cpu:                     jsii.String("256"),
 		Memory:                  jsii.String("512"),
 		NetworkMode:             jsii.String("awsvpc"),
 		RequiresCompatibilities: jsii.Strings("FARGATE"),
-		ExecutionRoleArn:        stack.IAMCloudWatch.Role.Arn(),
-		ContainerDefinitions:    jsii.String(containerDefinitions),
+		//
+		// In this Execution role we need to add all the permissions to all services that
+		// the container will need to execute
+		// example we always need to have the cloud watch and secret manager role and others specific to each service
+		ExecutionRoleArn:     stack.IAMCloudWatch.Role.Arn(),
+		ContainerDefinitions: jsii.String(containerDefinitions),
 	})
 
 	ecsTaskDefinitionSecGroupName := fmt.Sprintf("%v-ecs-nginx-sec-group", stack.Cfgs.AppName)
@@ -89,21 +97,21 @@ func NewNginxContainer(stack *stack.MyStack) {
 		LoadBalancer: &[]*ecsservice.EcsServiceLoadBalancer{
 			{
 				TargetGroupArn: stack.PublicAppLoadBalancer.TargetGroup.Arn(),
-				ContainerName:  jsii.String("fna-nginx"),
+				ContainerName:  jsii.String(containerName),
 				ContainerPort:  jsii.Number(80),
 			},
 		},
 		HealthCheckGracePeriodSeconds: jsii.Number(60),
-		// ServiceConnectConfiguration: &ecsservice.EcsServiceServiceConnectConfiguration{
-		// 	Enabled:   true,
-		// 	Namespace: jsii.String("aws_service_discovery_http_namespace"),
-		// 	Service: &ecsservice.EcsServiceServiceConnectConfigurationService{
-		// 		DiscoveryName: jsii.String("nginx"),
-		// 		PortName:      jsii.String("i-have-no-ideia"),
-		// 		ClientAlias: &ecsservice.EcsServiceServiceConnectConfigurationServiceClientAlias{
-		// 			Port: jsii.Number(80),
-		// 		},
-		// 	},
-		// },
+		ServiceConnectConfiguration: &ecsservice.EcsServiceServiceConnectConfiguration{
+			Enabled:   jsii.Bool(true),
+			Namespace: stack.ServiceDiscoveryPrivateNamespace.Arn(),
+			Service: &[]*ecsservice.EcsServiceServiceConnectConfigurationService{
+				{
+					//ECS Service Name - The name used in the service not the name used in the container name
+					DiscoveryName: jsii.String("nginx"),
+					PortName:      jsii.String("80"),
+				},
+			},
+		},
 	})
 }

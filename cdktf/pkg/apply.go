@@ -31,6 +31,7 @@ func ApplyStack(logger *zap.SugaredLogger, cfgs *configs.Configs, tfStack cdktf.
 	network.NewNatGateway(&myStack)
 	network.NewRouteTables(&myStack)
 	network.NewPublicApplicationLoadBalancer(&myStack)
+	network.NewServiceDiscoveryPrivateNamespace(&myStack)
 	iam.NewIAMCloudWatch(&myStack)
 	ecr.NewECRRepositories(&myStack)
 	ecs.NewECSFargateCluster(&myStack)
