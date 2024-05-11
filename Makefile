@@ -34,3 +34,13 @@ grpc:
 cdktf:
 	@cd cdktf
 	@GO_ENV=staging cdktf plan
+
+grpc-build:
+	@cd grpc
+	@docker build . -t rafaelbodao/ecs-grpc:latest
+	@docker push rafaelbodao/ecs-grpc:latest
+
+api-build:
+	@cd api
+	@docker build . -t rafaelbodao/ecs-api:latest
+	@docker push rafaelbodao/ecs-api:latest

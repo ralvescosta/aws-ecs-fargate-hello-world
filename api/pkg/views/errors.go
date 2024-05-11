@@ -28,3 +28,10 @@ func BadRequest(message any) *HTTPError {
 		Message:    message,
 	}
 }
+
+func InternalError(message any) *HTTPError {
+	return &HTTPError{
+		StatusCode: 500,
+		Message:    message,
+	}
+}

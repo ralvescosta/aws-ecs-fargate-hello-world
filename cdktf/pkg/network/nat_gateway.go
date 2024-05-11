@@ -9,9 +9,13 @@ import (
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/stack"
 )
 
+// This function will create two nat gateways
+//
+// The NAT Gateway will be responsible to configure the internet Egress for the private subnets
+// it mens that, the private subnet will be able to have outbound traffic to internet
 func NewNatGateway(stack *stack.MyStack) {
 	eipAName := fmt.Sprintf("%v-nat-g-eip-a", stack.Cfgs.AppName)
-	eipA := eip.NewEip(stack.TfStack, jsii.String(eipAName), &eip.EipConfig{
+	stack.NatGateways.EIpA = eip.NewEip(stack.TfStack, jsii.String(eipAName), &eip.EipConfig{
 		Domain: jsii.String("vpc"),
 		// Instance: stack.NatGateway.Id(),
 	})
@@ -20,11 +24,11 @@ func NewNatGateway(stack *stack.MyStack) {
 	stack.NatGateways.PrivateA = natgateway.NewNatGateway(stack.TfStack, jsii.String(natGatewayAName), &natgateway.NatGatewayConfig{
 		SubnetId:         stack.Subnets.PublicA.Id(),
 		ConnectivityType: jsii.String("public"),
-		AllocationId:     eipA.Id(),
+		AllocationId:     stack.NatGateways.EIpA.Id(),
 	})
 
 	eipBName := fmt.Sprintf("%v-nat-g-eip-b", stack.Cfgs.AppName)
-	eipB := eip.NewEip(stack.TfStack, jsii.String(eipBName), &eip.EipConfig{
+	stack.NatGateways.EIpB = eip.NewEip(stack.TfStack, jsii.String(eipBName), &eip.EipConfig{
 		Domain: jsii.String("vpc"),
 		// Instance: stack.NatGateway.Id(),
 	})
@@ -33,7 +37,7 @@ func NewNatGateway(stack *stack.MyStack) {
 	stack.NatGateways.PrivateB = natgateway.NewNatGateway(stack.TfStack, jsii.String(natGatewayBName), &natgateway.NatGatewayConfig{
 		SubnetId:         stack.Subnets.PublicB.Id(),
 		ConnectivityType: jsii.String("public"),
-		AllocationId:     eipB.Id(),
+		AllocationId:     stack.NatGateways.EIpB.Id(),
 	})
 
 	return

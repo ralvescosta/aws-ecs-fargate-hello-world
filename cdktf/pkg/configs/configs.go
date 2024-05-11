@@ -14,6 +14,7 @@ type Configs struct {
 	LogLevel string
 
 	Region                     string
+	AccountID                  string
 	TerraformCloudHostname     string
 	TerraformCloudOrganization string
 
@@ -45,6 +46,7 @@ func NewConfigs() (*Configs, *zap.SugaredLogger) {
 		LogLevel: logLevel,
 
 		Region:                     requiredEnv(logger, "AWS_REGION"),
+		AccountID:                  requiredEnv(logger, "ACCOUNT_ID"),
 		TerraformCloudHostname:     requiredEnv(logger, "TERRAFORM_CLOUD_HOSTNAME"),
 		TerraformCloudOrganization: requiredEnv(logger, "TERRAFORM_CLOUD_ORGANIZATION"),
 

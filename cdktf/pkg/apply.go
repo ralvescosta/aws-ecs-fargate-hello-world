@@ -6,6 +6,7 @@ import (
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/ecr"
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/ecs"
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/ecs/containers"
+	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/iam"
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/network"
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/stack"
 	"go.uber.org/zap"
@@ -18,6 +19,7 @@ func ApplyStack(logger *zap.SugaredLogger, cfgs *configs.Configs, tfStack cdktf.
 		TfStack:                tfStack,
 		Subnets:                &stack.Subnet{},
 		NatGateways:            &stack.NatGateway{},
+		IAMCloudWatch:          &stack.IAMCloudWatch{},
 		RouteTables:            &stack.RouteTable{},
 		PublicAppLoadBalancer:  &stack.ApplicationLoadBalancer{},
 		PrivateAppLoadBalancer: &stack.ApplicationLoadBalancer{},
@@ -29,6 +31,8 @@ func ApplyStack(logger *zap.SugaredLogger, cfgs *configs.Configs, tfStack cdktf.
 	network.NewNatGateway(&myStack)
 	network.NewRouteTables(&myStack)
 	network.NewPublicApplicationLoadBalancer(&myStack)
+	network.NewServiceDiscoveryPrivateNamespace(&myStack)
+	iam.NewIAMCloudWatch(&myStack)
 	ecr.NewECRRepositories(&myStack)
 	ecs.NewECSFargateCluster(&myStack)
 	containers.NewEcsContainers(&myStack)

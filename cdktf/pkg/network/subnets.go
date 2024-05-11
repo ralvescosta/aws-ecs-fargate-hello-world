@@ -8,6 +8,9 @@ import (
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/cdktf/pkg/stack"
 )
 
+// This function will create 4 subnets under our VPC, two private and two publics
+//
+// The private subnets will be routed through the NAT Gateway and the public will be routed through the internet gateway
 func NewSubnets(stack *stack.MyStack) {
 	privateSubNetAName := fmt.Sprintf("%v-private-sbnt-a", stack.Cfgs.AppName)
 	stack.Subnets.PrivateA = subnet.NewSubnet(stack.TfStack, jsii.Sprintf(privateSubNetAName), &subnet.SubnetConfig{

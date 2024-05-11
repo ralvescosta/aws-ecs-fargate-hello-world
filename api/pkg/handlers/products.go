@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/api/pkg/internal/services"
 	"github.com/ralvescosta/aws-ecs-fargate-hello-world/api/pkg/views"
@@ -47,6 +49,8 @@ func (h *productsHandler) Install(router server.HTTPServer) {
 // @Failure      500  {object}  views.HTTPError
 // @Router       /products [post]
 func (h *productsHandler) post(w http.ResponseWriter, req *http.Request) {
+	w.Header().Add("Content-Type", "application/json")
+
 	body, err := ExtractBody[views.CreateProductRequest](w, req)
 	if err != nil {
 		h.logger.Error("unformatted body", zap.Error(err))
@@ -61,6 +65,7 @@ func (h *productsHandler) post(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write(views.InternalError("error in grpc communication").ToBuffer())
 		return
 	}
 
@@ -83,21 +88,32 @@ func (h *productsHandler) post(w http.ResponseWriter, req *http.Request) {
 // @Failure      500      {object}  views.HTTPError
 // @Router       /products [get]
 func (h *productsHandler) list(w http.ResponseWriter, req *http.Request) {
-	body, err := ExtractBody[views.ListProductsRequest](w, req)
+	w.Header().Add("Content-Type", "application/json")
+
+	query := req.URL.Query()
+
+	c := query.Get("category")
+	l := query.Get("limit")
+	o := query.Get("offset")
+
+	ord := protos.Ordination_ASC
+	category, limit, offset, err := validateQuery(c, l, o)
 	if err != nil {
-		h.logger.Error("unformatted body", zap.Error(err))
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write(views.BadRequest("unformatted query parameters").ToBuffer())
 		return
 	}
 
 	grpcResponse, err := h.service.List(req.Context(), &protos.ListProductsRequest{
-		Limit:      body.Limit,
-		Offset:     body.Offset,
-		Category:   protos.Category(body.Category),
-		Ordination: (*protos.Ordination)(&body.Ordination),
+		Limit:      limit,
+		Offset:     offset,
+		Category:   *category,
+		Ordination: &ord,
 	})
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		w.Write(views.InternalError("error in grpc communication").ToBuffer())
 		return
 	}
 
@@ -109,4 +125,38 @@ func (h *productsHandler) list(w http.ResponseWriter, req *http.Request) {
 	bytes, _ := json.Marshal(list)
 	w.WriteHeader(http.StatusOK)
 	w.Write(bytes)
+}
+
+func validateQuery(c, l, o string) (*protos.Category, *int32, *int32, error) {
+	if c == "" {
+		return nil, nil, nil, errors.New("error")
+	}
+
+	if l == "" {
+		return nil, nil, nil, errors.New("error")
+	}
+
+	if o == "" {
+		return nil, nil, nil, errors.New("error")
+	}
+
+	var category protos.Category
+	switch c {
+	case "a":
+	case "A":
+		category = protos.Category_A
+	case "b":
+	case "B":
+		category = protos.Category_B
+	case "c":
+	case "C":
+		category = protos.Category_C
+	}
+
+	limit, _ := strconv.Atoi(l)
+	offset, _ := strconv.Atoi(o)
+	limitInt := int32(limit)
+	offsetInt := int32(offset)
+
+	return &category, &limitInt, &offsetInt, nil
 }
