@@ -1,3 +1,5 @@
+.PHONY: init reset swagger-gen protoc api grpc cdktf grpc-build api-build
+
 init:
 	@go work init
 	@go work use api grpc rmq-consumer cdktf protos

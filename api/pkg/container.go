@@ -50,7 +50,12 @@ func ProvideSignal() chan os.Signal {
 func ProvideProductsClient(cfgs *configs.Configs, logger logging.Logger) (protos.ProductsClient, error) {
 	logger.Debug("connection to products grpc...")
 
-	conn, err := grpc.Dial("localhost:5000", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	host := os.Getenv("PRODUCTS_GRPC")
+	if host == "" {
+		host = ":5000"
+	}
+
+	conn, err := grpc.Dial(host, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		logger.Error("failure to stablish connection", zap.Error(err))
 		return nil, err

@@ -65,7 +65,7 @@ func (h *productsHandler) post(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write(views.InternalError("error in grpc communication").ToBuffer())
+		w.Write(views.BadRequest("error in grpc communication").ToBuffer())
 		return
 	}
 
@@ -113,7 +113,7 @@ func (h *productsHandler) list(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write(views.InternalError("error in grpc communication").ToBuffer())
+		w.Write(views.BadRequest("error in grpc communication").ToBuffer())
 		return
 	}
 
@@ -143,12 +143,15 @@ func validateQuery(c, l, o string) (*protos.Category, *int32, *int32, error) {
 	var category protos.Category
 	switch c {
 	case "a":
+		fallthrough
 	case "A":
 		category = protos.Category_A
 	case "b":
+		fallthrough
 	case "B":
 		category = protos.Category_B
 	case "c":
+		fallthrough
 	case "C":
 		category = protos.Category_C
 	}
