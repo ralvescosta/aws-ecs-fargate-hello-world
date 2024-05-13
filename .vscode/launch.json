@@ -13,6 +13,17 @@
       "args": ["api", ""]
     },
     {
+      "name": "gRPC",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/grpc",
+      "env": {
+        "GO_ENV": "local"
+      },
+      "args": ["grpc", ""]
+    },
+    {
       "name": "CDKTF",
       "type": "go",
       "request": "launch",
