@@ -1,8 +1,8 @@
-FROM golang as build
+FROM golang:1.21.6 as build
 
 WORKDIR /build
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o=/build/myapp -ldflags "-s -w"
+RUN go mod download && CGO_ENABLED=0 GOOS=linux go build -o=myapp -ldflags "-s -w"
 
 FROM scratch
 
