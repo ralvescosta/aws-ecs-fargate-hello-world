@@ -1,9 +1,11 @@
 package pkg
 
 import (
+	"context"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/ralvescosta/gokit/configs"
 	"github.com/ralvescosta/gokit/logging"
@@ -55,9 +57,16 @@ func ProvideProductsClient(cfgs *configs.Configs, logger logging.Logger) (protos
 		host = ":5000"
 	}
 
-	conn, err := grpc.Dial(host, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	// 10 seconds timeout
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer func() {
+		logger.Error("timeout - grpc connection")
+		cancel()
+	}()
+
+	conn, err := grpc.DialContext(ctx, host, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
 	if err != nil {
-		logger.Error("failure to stablish connection", zap.Error(err))
+		logger.Error("failure to establish connection", zap.Error(err))
 		return nil, err
 	}
 

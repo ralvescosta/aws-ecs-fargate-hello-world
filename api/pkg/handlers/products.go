@@ -64,6 +64,7 @@ func (h *productsHandler) post(w http.ResponseWriter, req *http.Request) {
 	})
 
 	if err != nil {
+		h.logger.Error("failed to create products", zap.Error(err))
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write(views.BadRequest("error in grpc communication").ToBuffer())
 		return
@@ -112,6 +113,7 @@ func (h *productsHandler) list(w http.ResponseWriter, req *http.Request) {
 	})
 
 	if err != nil {
+		h.logger.Error("failed to list products", zap.Error(err))
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write(views.BadRequest("error in grpc communication").ToBuffer())
 		return

@@ -39,7 +39,7 @@ cdktf:
 
 grpc-build:
 	@cd grpc
-	@docker build . -t rafaelbodao/ecs-grpc:latest
+	@docker build . -t rafaelbodao/ecs-grpc:latest --network=host
 	@docker push rafaelbodao/ecs-grpc:latest
 
 api-build:

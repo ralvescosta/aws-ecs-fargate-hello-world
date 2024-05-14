@@ -23,7 +23,7 @@ type GRPCParams struct {
 func gRPC(params GRPCParams) error {
 	params.Logger.Debug("creating tpc listener...")
 
-	lis, err := net.Listen("tcp", "localhost:5000")
+	lis, err := net.Listen("tcp", ":5000")
 	if err != nil {
 		params.Logger.Error("failed to create tcp listener", zap.Error(err))
 		return err
