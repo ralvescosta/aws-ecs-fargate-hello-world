@@ -67,11 +67,11 @@ func NewPublicApplicationLoadBalancer(stack *stack.MyStack) {
 		TargetType:      jsii.String("ip"),
 		Protocol:        jsii.String("HTTP"),
 		ProtocolVersion: jsii.String("HTTP1"),
-		Port:            jsii.Number(80),
+		Port:            jsii.Number(3333),
 		HealthCheck: &albtargetgroup.AlbTargetGroupHealthCheck{
 			Enabled: true,
-			Path:    jsii.String("/"),
-			Port:    jsii.String("80"),
+			Path:    jsii.String("/health"),
+			Port:    jsii.String("3333"),
 		},
 	})
 
